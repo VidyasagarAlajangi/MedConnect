@@ -14,7 +14,7 @@
 - **Virtual Consultations**: Schedule and join video calls via integrated Meet API.
 - **Prescription & Delivery**: Receive e-prescriptions and get meds delivered from nearby pharmacies.
 
-### �펺 For Doctors
+### 🩺 For Doctors
 
 - **Doctor Dashboard**: View patient details, past consultations, and prescribe medications.
 - **Appointment Scheduling**: Accept/reject appointments and manage availability.
