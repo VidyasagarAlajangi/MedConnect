@@ -46,7 +46,6 @@ const PatientAppointments = () => {
     fetchAppointments();
   }, []);
 
-  // Join appointment socket rooms so call notifications work even when on this page
   useEffect(() => {
     const socket = getSocket();
     if (!socket || appointments.length === 0) return;
@@ -56,7 +55,6 @@ const PatientAppointments = () => {
       }
     });
 
-    // Refresh when prescription is uploaded by doctor
     const handlePrescriptionUploaded = () => {
       fetchAppointments();
       toast.success("Your doctor uploaded a prescription!", { icon: "💊" });
@@ -84,7 +82,7 @@ const PatientAppointments = () => {
     <div className="min-h-screen bg-gray-100 py-10 px-6">
       <div className="max-w-6xl mx-auto flex gap-8">
 
-        {/* Sidebar */}
+        
         <div className="w-64 bg-white border border-gray-200 rounded-xl p-4 h-fit shadow-sm">
 
           <h3 className="text-sm font-semibold text-gray-500 mb-4 uppercase">
@@ -126,7 +124,7 @@ const PatientAppointments = () => {
           </div>
         </div>
 
-        {/* Appointment List */}
+        
         <div className="flex-1">
 
           <h2 className="text-2xl font-semibold text-gray-900 mb-6">
@@ -159,7 +157,7 @@ const PatientAppointments = () => {
                         <span className="flex items-center gap-1"><Clock size={12} /> {apt.time}</span>
                       </div>
 
-                      {/* Prescription Section */}
+                      
                       {apt.prescription && (
                         <div className="mt-4 p-3 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-between group/presc max-w-sm">
                           <div className="flex items-center gap-3">

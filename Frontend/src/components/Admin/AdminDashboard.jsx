@@ -6,7 +6,6 @@ const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
 const IconAdmin = () => (
   <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
     <path fillRule="evenodd" d="M8 .5a.5.5 0 0 1 .293.085l7 4.5A.5.5 0 0 1 15.5 5.5v5a.5.5 0 0 1-.207.407l-7 5A.5.5 0 0 1 8 16a.5.5 0 0 1-.293-.093l-7-5A.5.5 0 0 1 .5 10.5v-5a.5.5 0 0 1 .207-.415l7-4.5A.5.5 0 0 1 8 .5Z" clipRule="evenodd" />
@@ -37,7 +36,6 @@ const IconStethoscope = () => (
   </svg>
 );
 
-// ── Stat card ─────────────────────────────────────────────────────────────────
 function StatCard({ icon, label, value, accent }) {
   return (
     <div
@@ -58,7 +56,6 @@ function StatCard({ icon, label, value, accent }) {
   );
 }
 
-// ── Section header ────────────────────────────────────────────────────────────
 function SectionHeader({ icon, title, count }) {
   return (
     <div className="flex items-center gap-2.5 mb-4">
@@ -79,7 +76,6 @@ function SectionHeader({ icon, title, count }) {
   );
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────────
 function EmptyState({ label }) {
   return (
     <div className="col-span-full py-10 flex flex-col items-center gap-2 text-slate-300">
@@ -92,7 +88,6 @@ function EmptyState({ label }) {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
 const AdminDashboard = () => {
   const adminData = useSelector((state) => state.admin.adminData);
   const doctors = useSelector((state) => state.admin.doctors);
@@ -126,7 +121,7 @@ const AdminDashboard = () => {
         className="min-h-screen fade-up"
         style={{ backgroundColor: BRAND_LIGHT }}
       >
-        {/* ── Top nav bar ── */}
+        
         <div
           className="bg-white border-b px-6 sm:px-8 py-4 flex items-center justify-between"
           style={{ borderColor: "#dbeafe" }}
@@ -162,10 +157,10 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* ── Page content ── */}
+        
         <div className="px-6 sm:px-8 py-8 max-w-6xl mx-auto">
 
-          {/* Greeting */}
+          
           <div className="mb-7">
             <h1 className="text-xl font-bold text-slate-800 tracking-tight">
               Good morning{adminData?.name ? `, ${adminData.name.split(" ")[0]}` : ""} 👋
@@ -173,14 +168,14 @@ const AdminDashboard = () => {
             <p className="text-sm text-slate-400 mt-0.5">Here's what's happening in the portal today.</p>
           </div>
 
-          {/* Stat strip */}
+          
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <StatCard icon={<IconAdmin />} label="Admins" value="1" accent />
             <StatCard icon={<IconDoctor />} label="Doctors" value={doctors.length} />
             <StatCard icon={<IconPatient />} label="Patients" value={patients.length} />
           </div>
 
-          {/* ── Doctors ── */}
+          
           <section className="mb-8">
             <SectionHeader icon={<IconDoctor />} title="Doctors" count={doctors.length} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -196,7 +191,7 @@ const AdminDashboard = () => {
                       boxShadow: "0 1px 4px rgba(74,144,226,0.07)",
                     }}
                   >
-                    {/* Avatar + name */}
+                    
                     <div className="flex items-center gap-3 mb-3">
                       <div
                         className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
@@ -215,7 +210,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Divider */}
+                    
                     <div className="border-t border-slate-100 pt-3">
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <IconMail />
@@ -228,7 +223,7 @@ const AdminDashboard = () => {
             </div>
           </section>
 
-          {/* ── Patients ── */}
+          
           <section>
             <SectionHeader icon={<IconPatient />} title="Patients" count={patients.length} />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

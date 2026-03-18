@@ -283,7 +283,7 @@ export default function Header() {
       <header className="mc-header">
         <div className="mc-inner">
 
-          {/* Logo */}
+          
           <div className="mc-logo" onClick={() => navigate("/")}>
             <div className="mc-logo-icon">
               <FontAwesomeIcon icon={faHeartbeat} style={{ color: "white", fontSize: 18 }} />
@@ -291,10 +291,10 @@ export default function Header() {
             <span className="mc-logo-text">MedConnect</span>
           </div>
 
-          {/* Right side */}
+          
           <div className="mc-right-wrap">
 
-            {/* Nav links */}
+            
             <ul className="mc-nav">
               <li className="mc-link" onClick={() => navigate("/")}>Home</li>
               <li className="mc-link" onClick={() => navigate("/about")}>About Us</li>
@@ -306,7 +306,7 @@ export default function Header() {
               )}
             </ul>
 
-            {/* Auth section */}
+            
             <div className="mc-right">
               {user ? (
                 <div className="mc-avatar-wrap">

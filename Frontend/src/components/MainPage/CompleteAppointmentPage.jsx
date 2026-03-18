@@ -2,11 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CompleteAppointment from "./CompleteAppointment";
 
-/**
- * Page wrapper around CompleteAppointment.
- * Doctor is redirected here after a video call ends.
- * Route: /complete-appointment/:appointmentId
- */
+
 const CompleteAppointmentPage = () => {
   const { appointmentId } = useParams();
   const navigate = useNavigate();
@@ -18,7 +14,7 @@ const CompleteAppointmentPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
-        {/* Header */}
+        
         <div className="mb-6 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mb-4">
             <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +28,7 @@ const CompleteAppointmentPage = () => {
           </p>
         </div>
 
-        {/* CompleteAppointment form */}
+        
         <CompleteAppointment
           appointmentId={appointmentId}
           onComplete={handleComplete}

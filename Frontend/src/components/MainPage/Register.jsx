@@ -5,14 +5,12 @@ import { useDispatch } from "react-redux";
 import { login, registerUser } from "../../utils/authSlice";
 import { toast } from "react-hot-toast";
 
-// Brand colour token — one place to change it
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
 const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
 const IconUser = () => (
   <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
@@ -66,7 +64,6 @@ const IconSpinner = () => (
   </svg>
 );
 
-// ── Field wrapper ─────────────────────────────────────────────────────────────
 function Field({ label, icon, error, children }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -90,7 +87,6 @@ function Field({ label, icon, error, children }) {
   );
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -154,14 +150,14 @@ export default function Register() {
       >
         <div className="w-full max-w-md">
 
-          {/* ── Card ── */}
+          
           <div className="bg-white rounded-2xl overflow-hidden"
             style={{ boxShadow: "0 2px 8px rgba(74,144,226,0.10), 0 8px 32px rgba(74,144,226,0.08)", border: "1px solid #dbeafe" }}>
 
-            {/* Top accent bar */}
+            
             <div className="h-1" style={{ backgroundColor: BRAND }} />
 
-            {/* Header */}
+            
             <div className="px-8 pt-4 pb-0">
               <h1 className="text-[22px] font-bold text-slate-800 tracking-tight leading-tight">
                 Create your account
@@ -171,9 +167,9 @@ export default function Register() {
               </p>
             </div>
 
-            {/* Step indicator */}
+            
             <div className="flex items-center gap-2 px-8 pt-5">
-              {/* Step 1 */}
+              
               <div className="flex items-center gap-2">
                 <div
                   className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 transition-all duration-200"
@@ -190,13 +186,13 @@ export default function Register() {
                 </span>
               </div>
 
-              {/* Connector line */}
+              
               <div
                 className="flex-1 h-px transition-all duration-300"
                 style={{ backgroundColor: isPersonal ? "#dbeafe" : BRAND }}
               />
 
-              {/* Step 2 */}
+              
               <div className="flex items-center gap-2">
                 <div
                   className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0 transition-all duration-200"
@@ -217,10 +213,10 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Divider */}
+            
             <div className="mx-8 mt-5 border-t border-slate-100" />
 
-            {/* Form body */}
+            
             <div className="px-8 py-4">
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
@@ -346,7 +342,7 @@ export default function Register() {
                   </div>
                 )}
 
-                {/* Sign-in link */}
+                
                 <p className="mt-6 text-center text-sm text-slate-400">
                   Already have an account?{" "}
                   <button
@@ -364,7 +360,7 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Footer */}
+          
           <p className="mt-5 text-center text-xs text-slate-400 leading-relaxed">
             By registering you agree to our{" "}
             <a href="#" className="underline underline-offset-2 transition-colors" style={{ color: BRAND }}>

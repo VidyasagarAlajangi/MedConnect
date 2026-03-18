@@ -40,7 +40,6 @@ const AppointmentNotes = ({ appointmentId, onComplete, isPrescriptionOnly = fals
       onComplete(data.appointment);
       setShowForm(false);
     } catch (error) {
-      console.error("Error completing appointment:", error);
       toast.error(error.message || "Failed to complete appointment");
     } finally {
       setLoading(false);

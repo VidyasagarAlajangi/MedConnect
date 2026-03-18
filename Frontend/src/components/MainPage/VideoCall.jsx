@@ -14,14 +14,12 @@ import {
 import axiosInstance from "../../utils/axiosInstance";
 import { getSocket } from "../../utils/socket";
 
-// ─── Participant Video/Audio Tile ────────────────────────────────────────────
 const ParticipantTile = ({ participantId, isLocal }) => {
   const { webcamStream, micStream, webcamOn, micOn, displayName } =
     useParticipant(participantId);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
-  // Attach webcam stream to <video> element
   useEffect(() => {
     if (!videoRef.current) return;
     if (webcamOn && webcamStream) {
@@ -34,7 +32,6 @@ const ParticipantTile = ({ participantId, isLocal }) => {
     }
   }, [webcamStream, webcamOn]);
 
-  // Attach remote mic stream to <audio> element (never mute remote audio)
   useEffect(() => {
     if (!audioRef.current || isLocal) return;
     if (micStream) {
@@ -51,7 +48,7 @@ const ParticipantTile = ({ participantId, isLocal }) => {
 
   return (
     <div className="relative aspect-video bg-slate-800 rounded-2xl overflow-hidden shadow-xl border border-slate-700">
-      {/* Video */}
+      
       <video
         ref={videoRef}
         autoPlay
@@ -60,7 +57,7 @@ const ParticipantTile = ({ participantId, isLocal }) => {
         className={`w-full h-full object-cover ${!webcamOn ? "hidden" : "block"}`}
       />
 
-      {/* Avatar when camera is off */}
+      
       {!webcamOn && (
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900">
           <div className="text-center">
@@ -72,10 +69,10 @@ const ParticipantTile = ({ participantId, isLocal }) => {
         </div>
       )}
 
-      {/* Remote audio */}
+      
       {!isLocal && <audio ref={audioRef} autoPlay playsInline />}
 
-      {/* Status icons bottom-left */}
+      
       <div className="absolute bottom-2 left-2 flex gap-1">
         {!micOn && (
           <span className="bg-red-600 p-1 rounded-full shadow">
@@ -89,7 +86,7 @@ const ParticipantTile = ({ participantId, isLocal }) => {
         )}
       </div>
 
-      {/* Name label top-left */}
+      
       <div className="absolute top-2 left-2 bg-black/60 px-2 py-0.5 rounded-full text-xs text-white font-medium">
         {isLocal ? `You (${displayName || "Me"})` : displayName || "Remote"}
       </div>
@@ -97,9 +94,8 @@ const ParticipantTile = ({ participantId, isLocal }) => {
   );
 };
 
-// ─── Inner meeting view — rendered INSIDE MeetingProvider ────────────────────
 const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
-  const [joined, setJoined] = useState(false); // true once meeting:joined fires
+  const [joined, setJoined] = useState(false); 
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
   const [meetingError, setMeetingError] = useState(null);
@@ -109,47 +105,38 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
     leave,
     toggleMic,
     toggleWebcam,
-    participants,       // Map of remote participants
-    localParticipant,  // the local participant object
+    participants,       
+    localParticipant,  
   } = useMeeting({
     onMeetingJoined: () => {
-      console.log("[VideoSDK] Meeting joined");
       setJoined(true);
     },
     onMeetingLeft: () => {
-      console.log("[VideoSDK] Meeting left");
       onCallEnd();
     },
     onParticipantJoined: (participant) => {
-      console.log("[VideoSDK] Participant joined:", participant.displayName);
       toast.success(`${participant.displayName} joined the call`, { icon: "👋", duration: 3000 });
     },
     onParticipantLeft: (participant) => {
-      console.log("[VideoSDK] Participant left:", participant.displayName);
       toast(`${participant.displayName} left the call`, { icon: "👋", duration: 3000 });
     },
     onError: (err) => {
-      console.error("[VideoSDK] Error:", err);
       setMeetingError(err?.message || "Meeting error occurred");
     },
   });
 
-  // ✅ CRITICAL: Must explicitly call join() after mounting inside MeetingProvider
   useEffect(() => {
-    console.log("[VideoSDK] Joining meeting with participant ID:", localParticipant?.id);
     join();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); 
 
   const socket = getSocket();
 
-  // All remote participant IDs (explicitly excluding local if present in map)
   const remoteParticipantIds = [...participants.keys()].filter(
     (id) => id !== localParticipant?.id
   );
 
   useEffect(() => {
     if (remoteParticipantIds.length > 0) {
-      console.log("[VideoSDK] Remote participants:", remoteParticipantIds);
     }
   }, [remoteParticipantIds]);
 
@@ -164,14 +151,12 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
   };
 
   const handleEndCall = () => {
-    // Notify remote party via socket
     if (socket && appointmentId) {
       socket.emit("video:call:end", { appointmentId });
     }
-    leave(); // triggers onMeetingLeft → onCallEnd
+    leave(); 
   };
 
-  // Show error state
   if (meetingError) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
@@ -193,7 +178,7 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col select-none">
 
-      {/* ── Top bar ────────────────────────────────────────────────────────── */}
+      
       <div className="bg-slate-900 border-b border-slate-800 px-5 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2 text-white font-semibold text-sm">
           <div className={`w-2 h-2 rounded-full ${joined ? "bg-emerald-400 animate-pulse" : "bg-yellow-400 animate-ping"}`} />
@@ -205,10 +190,10 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
         </div>
       </div>
 
-      {/* ── Video Grid ─────────────────────────────────────────────────────── */}
+      
       <div className="flex-1 p-4 flex flex-col items-center justify-center overflow-auto gap-4">
 
-        {/* Joining spinner */}
+        
         {!joined && (
           <div className="flex flex-col items-center gap-3 text-slate-400">
             <Loader2 className="w-10 h-10 animate-spin text-indigo-400" />
@@ -223,17 +208,17 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
                 : "grid-cols-1 md:grid-cols-2"
               }`}
           >
-            {/* Local participant tile */}
+            
             {localParticipant && (
               <ParticipantTile participantId={localParticipant.id} isLocal />
             )}
 
-            {/* Remote participant tiles */}
+            
             {remoteParticipantIds.map((id) => (
               <ParticipantTile key={id} participantId={id} isLocal={false} />
             ))}
 
-            {/* Waiting placeholder when alone */}
+            
             {remoteParticipantIds.length === 0 && (
               <div className="aspect-video bg-slate-800 rounded-2xl flex items-center justify-center border-2 border-dashed border-slate-600">
                 <div className="text-center text-slate-400 p-8">
@@ -257,11 +242,11 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
         )}
       </div>
 
-      {/* ── Controls Bar ───────────────────────────────────────────────────── */}
+      
       <div className="bg-slate-900 border-t border-slate-800 px-6 py-5 shrink-0">
         <div className="flex items-end justify-center gap-6">
 
-          {/* Mic toggle */}
+          
           <div className="flex flex-col items-center gap-1.5">
             <button
               onClick={handleToggleMic}
@@ -277,7 +262,7 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
             <span className="text-slate-500 text-xs">{micOn ? "Mute" : "Unmuted"}</span>
           </div>
 
-          {/* End call */}
+          
           <div className="flex flex-col items-center gap-1.5">
             <button
               onClick={handleEndCall}
@@ -289,7 +274,7 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
             <span className="text-slate-500 text-xs">End Call</span>
           </div>
 
-          {/* Camera toggle */}
+          
           <div className="flex flex-col items-center gap-1.5">
             <button
               onClick={handleToggleCam}
@@ -310,7 +295,6 @@ const MeetingView = ({ appointmentId, userRole, onCallEnd }) => {
   );
 };
 
-// ─── Main VideoCall Page ─────────────────────────────────────────────────────
 const VideoCallPage = () => {
   const { appointmentId } = useParams();
   const user = useSelector((state) => state.auth.user);
@@ -323,11 +307,10 @@ const VideoCallPage = () => {
   const [error, setError] = useState(null);
   const [callDone, setCallDone] = useState(false);
 
-  // Request media permissions before joining
   const requestPermissions = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      stream.getTracks().forEach((t) => t.stop()); // just checking permissions
+      stream.getTracks().forEach((t) => t.stop()); 
       return true;
     } catch (err) {
       const msgs = {
@@ -345,30 +328,25 @@ const VideoCallPage = () => {
       setLoading(true);
       setError(null);
 
-      // 1) Ask for permissions
       const ok = await requestPermissions();
       if (!ok) return;
 
-      // 2) Join the socket room for real-time events
       const socket = getSocket();
       if (socket && appointmentId) {
         socket.emit("appointment:join", appointmentId);
       }
 
       if (userRole === "doctor") {
-        // Doctor: Start (or re-join) the meeting
         const meetingRes = await axiosInstance.post(
           `/api/video/appointment/${appointmentId}/start`
         );
         const mId = meetingRes.data?.meetingId;
         if (!mId) throw new Error("Could not get meeting ID from server.");
 
-        // Emit via socket so patient gets notified through both paths
         if (socket && appointmentId) {
           socket.emit("video:call:start", { appointmentId, meetingId: mId });
         }
 
-        // Get token
         const tokenRes = await axiosInstance.get("/api/video/token");
         const vToken = tokenRes.data?.token;
         if (!vToken) throw new Error("Could not get VideoSDK token.");
@@ -377,7 +355,6 @@ const VideoCallPage = () => {
         setMeetingId(mId);
 
       } else {
-        // Patient: Join the existing meeting (poll up to ~60s for doctor to start)
         const maxAttempts = 12;
         const pollDelay = 5000;
         let toastId = null;
@@ -392,16 +369,15 @@ const VideoCallPage = () => {
               if (toastId) toast.dismiss(toastId);
               setSdkToken(vToken);
               setMeetingId(mId);
-              return; // success — exits the for loop and the function
+              return; 
             }
           } catch (joinErr) {
             const isNotStarted =
               joinErr.response?.status === 400 &&
               joinErr.response?.data?.message?.includes("not been started");
 
-            if (!isNotStarted) throw joinErr; // unexpected error — rethrow
+            if (!isNotStarted) throw joinErr; 
 
-            // Doctor hasn't started yet — wait and retry
             if (attempt === 0) {
               toastId = toast.loading("Waiting for doctor to start the call…");
             }
@@ -410,7 +386,6 @@ const VideoCallPage = () => {
             }
           }
         }
-        // Exhausted retries
         if (toastId) toast.dismiss(toastId);
         throw new Error("Doctor has not started the call yet. Please try again.");
       }
@@ -432,7 +407,6 @@ const VideoCallPage = () => {
     initCall();
   }, [appointmentId, initCall]);
 
-  // Listen for remote call-end event
   useEffect(() => {
     const socket = getSocket();
     if (!socket) return;
@@ -445,7 +419,6 @@ const VideoCallPage = () => {
     return () => socket.off("video:call:ended", onRemoteEnd);
   }, [appointmentId]);
 
-  // Called when meeting leaves (from MeetingView)
   const handleCallEnd = useCallback(async () => {
     try {
       await axiosInstance.post(`/api/video/appointment/${appointmentId}/end`);
@@ -460,7 +433,6 @@ const VideoCallPage = () => {
     }
   }, [appointmentId, userRole, navigate]);
 
-  // ── Render states ─────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 gap-4">
@@ -509,7 +481,6 @@ const VideoCallPage = () => {
         webcamEnabled: true,
         participantId: (user?._id || user?.id)?.toString(),
         mode: "CONFERENCE",
-        // multiStream: true is removed for better compatibility in 1-on-1 calls
       }}
       token={sdkToken}
     >

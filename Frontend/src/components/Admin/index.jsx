@@ -86,7 +86,7 @@ export default function AdminPanel() {
       <div className="min-h-screen py-6 px-4" style={{ backgroundColor: BRAND_LIGHT }}>
         <div className="w-full max-w-2xl mx-auto">
 
-          {/* ── Header ── */}
+          
           <div className="mb-7 fade-up">
             <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
               {selected ? activeOption?.label : "Admin Panel"}
@@ -98,7 +98,7 @@ export default function AdminPanel() {
             </p>
           </div>
 
-          {/* ── Card shell ── */}
+          
           <div
             className="bg-white rounded-2xl overflow-hidden fade-up"
             style={{
@@ -106,12 +106,12 @@ export default function AdminPanel() {
               boxShadow: "0 2px 8px rgba(74,144,226,0.08), 0 8px 32px rgba(74,144,226,0.06)",
             }}
           >
-            {/* Accent bar */}
+            
             <div className="h-1" style={{ backgroundColor: BRAND }} />
 
             <div className="p-6 sm:p-8">
               {!selected ? (
-                /* ── Option grid ── */
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {options.map((opt) => {
                     const Icon = opt.icon;
@@ -125,7 +125,7 @@ export default function AdminPanel() {
                           boxShadow: "0 1px 3px rgba(74,144,226,0.06)",
                         }}
                       >
-                        {/* Icon bubble */}
+                        
                         <div
                           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                           style={{ backgroundColor: opt.iconBg }}
@@ -133,13 +133,13 @@ export default function AdminPanel() {
                           <Icon size={20} style={{ color: opt.iconColor }} />
                         </div>
 
-                        {/* Text */}
+                        
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-slate-800">{opt.label}</p>
                           <p className="text-xs text-slate-400 mt-0.5 leading-snug">{opt.description}</p>
                         </div>
 
-                        {/* Arrow */}
+                        
                         <div className="panel-arrow flex-shrink-0" style={{ color: BRAND }}>
                           <ChevronRight size={16} />
                         </div>
@@ -148,9 +148,9 @@ export default function AdminPanel() {
                   })}
                 </div>
               ) : (
-                /* ── Sub-view ── */
+                
                 <div className="fade-up">
-                  {/* Back button + breadcrumb */}
+                  
                   <div className="flex items-center gap-3 mb-6">
                     <button
                       onClick={() => setSelected(null)}
@@ -160,7 +160,7 @@ export default function AdminPanel() {
                       <ArrowLeft size={14} /> Back
                     </button>
 
-                    {/* Breadcrumb */}
+                    
                     <div className="flex items-center gap-1.5 text-xs text-slate-400">
                       <span>Admin Panel</span>
                       <ChevronRight size={12} />
@@ -170,10 +170,10 @@ export default function AdminPanel() {
                     </div>
                   </div>
 
-                  {/* Divider */}
+                  
                   <div className="border-t border-slate-100 mb-6" />
 
-                  {/* Routed child component */}
+                  
                   {selected === "verifyDoctor" && <VerifyDoctor />}
                   {selected === "viewDoctors" && <ViewDoctors />}
                   {selected === "viewAppointments" && <ViewAppointments />}
@@ -183,7 +183,7 @@ export default function AdminPanel() {
             </div>
           </div>
 
-          {/* Footer */}
+          
 
         </div>
       </div>

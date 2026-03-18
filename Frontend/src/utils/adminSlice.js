@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
-// Async thunks
 export const fetchAdminData = createAsyncThunk(
   "admin/fetchAdminData",
   async (_, { rejectWithValue }) => {
@@ -74,7 +73,6 @@ const adminSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchAdminData
       .addCase(fetchAdminData.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -87,7 +85,6 @@ const adminSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle fetchAllDoctors
       .addCase(fetchAllDoctors.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -100,7 +97,6 @@ const adminSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle fetchAllPatients
       .addCase(fetchAllPatients.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -113,7 +109,6 @@ const adminSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle verifyDoctor
       .addCase(verifyDoctor.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -122,10 +117,8 @@ const adminSlice = createSlice({
         state.loading = false;
         const { doctorId, action: verifyAction, doctor } = action.payload;
         if (verifyAction === 'reject') {
-          // Remove rejected doctor from list
           state.doctors = state.doctors.filter(doc => doc._id !== doctorId);
         } else if (doctor) {
-          // Update approved doctor in list
           const index = state.doctors.findIndex(doc => doc._id === doctor._id);
           if (index !== -1) {
             state.doctors[index] = doctor;

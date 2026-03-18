@@ -5,7 +5,7 @@ import {
   Shield, Zap, Clock, Star,
 } from "lucide-react";
 
-/* ── Intersection-observer hook ─────────────────────── */
+
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
@@ -20,7 +20,7 @@ function useInView(threshold = 0.15) {
   return [ref, inView];
 }
 
-/* ── Animated number ────────────────────────────────── */
+
 function AnimNum({ target, suffix = "" }) {
   const [val, setVal] = useState(0);
   const [ref, inView] = useInView(0.5);
@@ -38,7 +38,7 @@ function AnimNum({ target, suffix = "" }) {
   return <span ref={ref}>{val.toLocaleString()}{suffix}</span>;
 }
 
-/* ── Data ────────────────────────────────────────────── */
+
 const TILES = [
   {
     num: "01", icon: Video,
@@ -111,7 +111,7 @@ const STATS = [
   { icon: Zap, value: 50, suffix: "k+", label: "Consultations Done" },
 ];
 
-/* ── Tile card ──────────────────────────────────────── */
+
 function Tile({ num, icon: Icon, title, desc, gradient, glow, chip, index }) {
   const [ref, inView] = useInView();
   return (
@@ -128,19 +128,19 @@ function Tile({ num, icon: Icon, title, desc, gradient, glow, chip, index }) {
       onMouseEnter={e => (e.currentTarget.style.boxShadow = `0 20px 60px ${glow}, 0 4px 16px rgba(0,0,0,0.08)`)}
       onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.06)")}
     >
-      {/* number watermark */}
+      
       <span className="absolute top-4 right-5 font-mono text-5xl font-black text-gray-100 select-none pointer-events-none leading-none">
         {num}
       </span>
 
-      {/* chip */}
+      
       {chip && (
         <div className={`self-start text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full bg-gradient-to-r ${gradient} text-white`}>
           {chip}
         </div>
       )}
 
-      {/* icon */}
+      
       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg
                        transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
         <Icon className="w-6 h-6 text-white" />
@@ -151,14 +151,14 @@ function Tile({ num, icon: Icon, title, desc, gradient, glow, chip, index }) {
         <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
       </div>
 
-      {/* animated bottom bar */}
+      
       <div className={`absolute bottom-0 left-0 h-[3px] bg-gradient-to-r ${gradient} rounded-full
                        w-0 group-hover:w-full transition-all duration-500`} />
     </div>
   );
 }
 
-/* ── Deep card ──────────────────────────────────────── */
+
 function DeepCard({ icon: Icon, tag, title, desc, bullets, gradient, chipColor, index }) {
   const [ref, inView] = useInView();
   const lines = title.split("\n");
@@ -174,14 +174,14 @@ function DeepCard({ icon: Icon, tag, title, desc, bullets, gradient, chipColor, 
         transition: `opacity 0.6s ${index * 0.12}s ease, transform 0.6s ${index * 0.12}s ease`,
       }}
     >
-      {/* background blob */}
+      
       <div
         className={`absolute -top-16 -right-16 w-48 h-48 rounded-full bg-gradient-to-br ${gradient} opacity-[0.07]
                     transition-all duration-500 group-hover:opacity-[0.14] group-hover:scale-110`}
       />
 
       <div>
-        {/* tag pill */}
+        
         <span
           className="inline-block text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-5 border"
           style={{ color: chipColor, borderColor: chipColor + "40", background: chipColor + "10" }}
@@ -189,20 +189,20 @@ function DeepCard({ icon: Icon, tag, title, desc, bullets, gradient, chipColor, 
           {tag}
         </span>
 
-        {/* icon */}
+        
         <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center mb-6 shadow-lg
                          transition-transform duration-300 group-hover:scale-110`}>
           <Icon className="w-7 h-7 text-white" />
         </div>
 
-        {/* title */}
+        
         <h3 className="text-2xl font-bold text-gray-900 leading-tight mb-4">
           {lines.map((l, i) => <span key={i} className="block">{l}</span>)}
         </h3>
 
         <p className="text-sm text-gray-500 leading-relaxed mb-7">{desc}</p>
 
-        {/* bullets */}
+        
         <ul className="space-y-3">
           {bullets.map(b => (
             <li key={b} className="flex items-center gap-3 text-sm text-gray-700">
@@ -215,7 +215,7 @@ function DeepCard({ icon: Icon, tag, title, desc, bullets, gradient, chipColor, 
         </ul>
       </div>
 
-      {/* "Learn more" footer */}
+      
       <button
         className="mt-8 self-start inline-flex items-center gap-1.5 text-sm font-semibold group/btn transition-all duration-200"
         style={{ color: chipColor }}
@@ -227,7 +227,7 @@ function DeepCard({ icon: Icon, tag, title, desc, bullets, gradient, chipColor, 
   );
 }
 
-/* ── Stat card ──────────────────────────────────────── */
+
 function StatCard({ icon: Icon, value, suffix, label }) {
   const [ref, inView] = useInView(0.4);
   return (
@@ -247,12 +247,12 @@ function StatCard({ icon: Icon, value, suffix, label }) {
   );
 }
 
-/* ── Root ───────────────────────────────────────────── */
+
 export default function FeaturesGrid() {
   return (
     <section id="features" className="py-4">
 
-      {/* ══ SECTION HEADER ══════════════════════════════════ */}
+      
       <div className="text-center mb-16">
         <p className="text-xs font-bold tracking-widest uppercase text-blue-600 mb-4">
           What we offer
@@ -266,24 +266,24 @@ export default function FeaturesGrid() {
         </p>
       </div>
 
-      {/* ══ STATS ROW ══════════════════════════════════════ */}
+      
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
         {STATS.map(s => <StatCard key={s.label} {...s} />)}
       </div>
 
-      {/* ══ CORE SERVICE TILES (4-col) ══════════════════════ */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
         {TILES.map((t, i) => <Tile key={t.num} {...t} index={i} />)}
       </div>
 
-      {/* ══ DIVIDER ════════════════════════════════════════ */}
+      
       <div className="flex items-center gap-4 mb-20">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gray-200" />
         <span className="text-xs font-bold tracking-widest uppercase text-gray-400">How it works deeper</span>
         <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gray-200" />
       </div>
 
-      {/* ══ DEEP FEATURE CARDS (3-col) ══════════════════════ */}
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
         {DEEP.map((d, i) => <DeepCard key={d.tag} {...d} index={i} />)}
       </div>

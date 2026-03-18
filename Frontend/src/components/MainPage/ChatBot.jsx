@@ -83,24 +83,16 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
     setIsLoading(true);
 
     try {
-      // Step 1: Get AI Response from Backend (with full conversation history for context)
       const response = await axiosInstance.post("/api/chat/ai", {
         message: userMessage,
-        history: chatHistory,  // send prior turns so AI remembers context
+        history: chatHistory,  
       });
 
       let botReply = response.data?.reply || "I'm not sure how to respond.";
 
-      // Step 2: Update history with this exchange (keep last 20 turns to stay within token limits)
       dispatch(updateChatHistory({ userMessage, botReply }));
 
-      console.log("Backend AI Reply:", botReply);
 
-      // Step 3: Extract Doctor Specialization
-      // Gemini may format as: "* Doctor type: General Physician"
-      //                    or: "Doctor type: **General Physician**"
-      //                    or: "- Doctor type: Cardiologist"
-      // We strip bullet markers, bold markers, and extra whitespace
       const specializationMatch = botReply.match(
         /(?:\*|-|•)?\s*doctor\s+type\s*:\s*\*{0,2}([^*\n]+)\*{0,2}/i
       );
@@ -108,15 +100,11 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
       let specialization = null;
 
       if (specializationMatch) {
-        // Take the first entry (before "or" / "and" / ",")
         const raw = specializationMatch[1].trim();
         const first = raw.split(/\s*(?:or|and|,)\s*/i)[0].trim();
-        // Strip any trailing punctuation or parenthetical
         specialization = first.replace(/[.,;:!?]+$/, "").split("(")[0].trim();
       }
 
-      // Also try to find using the known specialization list as a fallback
-      // These must EXACTLY match values stored in the DB
       if (!specialization) {
         const knownSpecializations = [
           "General Physician", "Cardiologist", "Neurologist", "Orthopedic",
@@ -134,9 +122,7 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
         }
       }
 
-      console.log("Extracted Specialization:", specialization);
 
-      // Step 3: Fetch Doctors if Specialization is Found
       if (specialization) {
         try {
           const doctorResponse = await axiosInstance.get(
@@ -169,14 +155,12 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
   </div>`;
           }
         } catch (error) {
-          console.error("Error fetching doctors:", error);
           botReply += `\n\n**Error fetching doctor data. Please try again later.**`;
         }
       }
 
       return botReply;
     } catch (error) {
-      console.error("Error in getBotResponse:", error);
       return "Sorry, I'm having trouble responding right now.";
     } finally {
       setIsLoading(false);
@@ -204,11 +188,10 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
       };
       dispatch(addMessage(botMessage));
     } catch (error) {
-      console.log(error);
     }
   };
 
-  /* ── FIX: prevent Enter key from scrolling the page ── */
+  
   const handleKey = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -216,7 +199,7 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
     }
   };
 
-  /* ── Loading dots ─────────────────────────────────── */
+  
   const LoadingDots = () => (
     <div className="flex items-center gap-1 py-1">
       {[0, 1, 2].map((i) => (
@@ -226,7 +209,7 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
     </div>
   );
 
-  /* ── Empty state with suggestion chips ─────────────── */
+  
   const EmptyState = () => (
     <div className="flex flex-col items-center justify-center h-full gap-5 select-none px-4">
       <div className="w-16 h-16 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg">
@@ -272,7 +255,7 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
         <div className="flex flex-col w-full max-w-3xl rounded-2xl overflow-hidden bg-white"
           style={{ height: "620px", boxShadow: "0 20px 60px rgba(37,99,235,0.10),0 4px 16px rgba(0,0,0,0.06),0 0 0 1px rgba(0,0,0,0.05)" }}>
 
-          {/* ── HEADER ─────────────────────────────────── */}
+          
           <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100">
@@ -306,7 +289,7 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
             </button>
           </div>
 
-          {/* ── MESSAGES ────────────────────────────────── */}
+          
           <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-5 py-5 bg-gray-50 space-y-4">
             {messages.length === 0 && !isLoading ? (
               <EmptyState />
@@ -341,7 +324,7 @@ If the question is not about health, say: "Sorry it is irrelevant to my purpose.
             )}
           </div>
 
-          {/* ── INPUT BAR ───────────────────────────────── */}
+          
           <div className="flex-shrink-0 border-t border-gray-100 bg-white px-4 py-3">
             <div className="flex items-center gap-2">
               <input

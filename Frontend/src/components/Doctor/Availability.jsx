@@ -6,12 +6,10 @@ import "react-calendar/dist/Calendar.css";
 import { fetchDoctorData, updateDoctorAvailability } from "../../utils/doctorSlice";
 import { toast } from "react-hot-toast";
 
-// --- DESIGN TOKENS ---
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// --- HELPERS ---
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return new Date(dateString).toLocaleDateString("en-GB", {
@@ -97,7 +95,7 @@ export default function Availability() {
     <div className="min-h-screen p-6 md:p-10" style={{ backgroundColor: BRAND_LIGHT }}>
       <div className="max-w-3xl mx-auto">
 
-        {/* Add Slot Card */}
+        
         <div className="bg-white rounded-2xl border border-[#dbeafe] mb-10 overflow-visible">
           <div className="h-1.5 w-full rounded-t-2xl" style={{ backgroundColor: BRAND }} />
           <div className="p-6 md:p-8">
@@ -112,7 +110,7 @@ export default function Availability() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-              {/* DATE */}
+              
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-500 uppercase">
                   Select Date
@@ -147,7 +145,7 @@ export default function Availability() {
                 )}
               </div>
 
-              {/* TIME */}
+              
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-500 uppercase">
                   Start Time
@@ -165,7 +163,7 @@ export default function Availability() {
               </div>
             </div>
 
-            {/* BUTTON */}
+            
             <div className="mt-8">
               <button
                 onClick={handleAddSlot}
@@ -183,7 +181,7 @@ export default function Availability() {
           </div>
         </div>
 
-        {/* SLOTS */}
+        
         <div className="space-y-4">
           {slots.map((s, i) => (
             <div key={i} className="bg-white rounded-xl p-5 border">

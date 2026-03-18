@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
-// Async thunk for fetching all doctors
 export const fetchAllDoctors = createAsyncThunk(
   "doctorSearch/fetchAllDoctors",
   async (_, { rejectWithValue }) => {
@@ -72,7 +71,6 @@ const doctorSearchSlice = createSlice({
   },
 });
 
-// Helper function to filter doctors
 const filterDoctors = (doctors, filters) => {
   if (!doctors || !Array.isArray(doctors)) {
     return [];

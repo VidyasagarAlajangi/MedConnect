@@ -6,7 +6,6 @@ const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// ── Status config ─────────────────────────────────────────────────────────────
 const STATUS = {
   confirmed: {
     label: "Confirmed",
@@ -65,17 +64,16 @@ function EmptyState() {
   );
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
-/** Formats any date string — ISO, YYYY-MM-DD, etc. — into "28 May 2025" */
+
 function formatDate(raw) {
   if (!raw) return "—";
   const d = new Date(raw);
-  if (isNaN(d)) return raw; // fall back to raw if unparseable
+  if (isNaN(d)) return raw; 
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
-/** Formats a 24-h time string like "11:00" into "11:00 AM" */
+
 function formatTime(raw) {
   if (!raw) return null;
   const [h, m] = raw.split(":").map(Number);
@@ -85,7 +83,7 @@ function formatTime(raw) {
   return `${hour}:${String(m ?? 0).padStart(2, "0")} ${suffix}`;
 }
 
-/** Safe avatar initial — only shows a letter, never a digit */
+
 function avatarInitial(name, fallback = "?") {
   if (!name || typeof name !== "string") return fallback;
   const letter = name.trim().match(/[A-Za-z]/)?.[0];
@@ -102,7 +100,6 @@ export default function ViewAppointments() {
         const res = await axiosInstance.get("/api/admin/view-appointments");
         setAppointments(res.data.appointments || []);
       } catch (err) {
-        console.error("Error fetching appointments:", err);
       } finally {
         setLoading(false);
       }
@@ -129,7 +126,7 @@ export default function ViewAppointments() {
 
       <div className="fade-up">
 
-        {/* Section heading */}
+        
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
             <div
@@ -154,7 +151,7 @@ export default function ViewAppointments() {
           )}
         </div>
 
-        {/* Loading */}
+        
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-300">
             <Loader2 size={28} className="animate-spin" />
@@ -179,7 +176,7 @@ export default function ViewAppointments() {
                       boxShadow: "0 1px 4px rgba(74,144,226,0.07)",
                     }}
                   >
-                    {/* Top row: date + status */}
+                    
                     <div className="flex items-start justify-between gap-2 mb-4">
                       <div
                         className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
@@ -202,10 +199,10 @@ export default function ViewAppointments() {
                       <StatusBadge status={status} />
                     </div>
 
-                    {/* Divider */}
+                    
                     <div className="border-t border-slate-100 mb-3.5" />
 
-                    {/* Doctor row */}
+                    
                     <div className="flex items-center gap-3 mb-3">
                       <div
                         className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
@@ -226,7 +223,7 @@ export default function ViewAppointments() {
                       </div>
                     </div>
 
-                    {/* Patient row */}
+                    
                     <div className="flex items-center gap-3">
                       <div
                         className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
@@ -244,7 +241,7 @@ export default function ViewAppointments() {
                       </div>
                     </div>
 
-                    {/* Status bottom strip */}
+                    
                     <div
                       className="mt-4 -mx-5 -mb-5 px-5 py-2.5 rounded-b-xl flex items-center gap-1.5"
                       style={{ backgroundColor: statusCfg.bg, borderTop: `1px solid ${statusCfg.border}` }}

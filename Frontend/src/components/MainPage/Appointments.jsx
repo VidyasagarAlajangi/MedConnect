@@ -40,12 +40,10 @@ const Appointments = () => {
     }
   }, [dispatch, userRole]);
 
-  // Listen for real-time status updates and refresh
   useEffect(() => {
     if (!socket) return;
 
     const handleStatusUpdate = (data) => {
-      // Data format: { appointmentId, status, timestamp }
       dispatch(updateAppointment({
         _id: data.appointmentId,
         status: data.status
@@ -59,7 +57,6 @@ const Appointments = () => {
     };
   }, [socket, dispatch]);
 
-  // Cancel appointment logic
   const handleCancel = async (appointmentId) => {
     try {
       const res = await axiosInstance.put(`/api/appointment/cancel/${appointmentId}`);
@@ -69,7 +66,6 @@ const Appointments = () => {
         throw new Error(data.message || "Failed to cancel appointment");
       }
 
-      // Update the appointment in Redux store
       dispatch(updateAppointment({
         _id: appointmentId,
         status: "cancelled"
@@ -77,17 +73,14 @@ const Appointments = () => {
 
       toast.success("Appointment cancelled successfully");
     } catch (err) {
-      console.error("Error cancelling appointment:", err);
       toast.error(err.message || "Failed to cancel appointment");
     }
   };
 
-  // Handle video call connection
   const handleVideoCall = (appointment) => {
     navigate(`/video-call/${appointment._id}`);
   };
 
-  // Handle ending video call
   const handleEndVideoCall = async () => {
     if (!activeVideoCall) return;
 
@@ -101,53 +94,43 @@ const Appointments = () => {
     }
   };
 
-  // Helper to check if appointment is "now"
   const isNow = (date, time) => {
     if (!date || !time) return false;
 
     try {
-      // Parse the time string - handle both HH:MM and HH:MM AM/PM formats
       let hour, minute;
       if (time.includes('AM') || time.includes('PM')) {
-        // Handle 12-hour format (HH:MM AM/PM)
         const [timeStr, meridian] = time.split(' ');
         [hour, minute] = timeStr.split(':').map(Number);
         if (meridian === 'PM' && hour !== 12) hour += 12;
         if (meridian === 'AM' && hour === 12) hour = 0;
       } else {
-        // Handle 24-hour format (HH:MM)
         [hour, minute] = time.split(':').map(Number);
       }
 
-      // Create appointment date
       const apptDate = new Date(date);
       apptDate.setHours(hour, minute, 0, 0);
 
-      // Get current date
       const now = new Date();
 
-      // Allow "now" if within +/- 15 minutes
       return Math.abs(apptDate - now) < 15 * 60 * 1000;
     } catch (error) {
-      console.error('Error parsing appointment time:', error);
       return false;
     }
   };
 
-  // Filter appointments
   const pendingAppointments = appointments.filter((a) => a.status === "pending");
   const confirmedAppointments = appointments.filter((a) => a.status === "confirmed");
   const pastAppointments = appointments.filter(
     (a) => a.status === "completed" || a.status === "cancelled"
   );
 
-  // Horizontal card for pending/confirmed
   const renderHorizontalCard = (appointment, isConfirmed = false) => (
     <div
       key={appointment._id}
       className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col md:flex-row md:items-center md:justify-between gap-4"
     >
-      {/* Left Info */}
+      
       <div className="flex-1 space-y-2">
 
         <div>
@@ -187,7 +170,7 @@ const Appointments = () => {
 
       </div>
 
-      {/* Actions */}
+      
       <div className="flex flex-wrap gap-2">
 
         <button
@@ -227,14 +210,13 @@ const Appointments = () => {
     </div>
   );
 
-  // Full card for completed/cancelled
   const renderAppointmentCard = (appointment) => (
     <div
       key={appointment._id}
       className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition"
     >
 
-      {/* Doctor Info */}
+      
       <div className="mb-4">
 
         <h2 className="text-lg font-semibold text-gray-900">
@@ -247,7 +229,7 @@ const Appointments = () => {
 
       </div>
 
-      {/* Appointment Info */}
+      
       <div className="space-y-3 text-sm text-gray-600 mb-4">
 
         <div className="flex items-center gap-2">
@@ -267,7 +249,7 @@ const Appointments = () => {
 
       </div>
 
-      {/* Status */}
+      
       <span
         className={`inline-block text-xs font-medium px-3 py-1 rounded-full mb-4 ${appointment.status === "completed"
             ? "bg-blue-100 text-blue-700"
@@ -280,7 +262,7 @@ const Appointments = () => {
           appointment.status.slice(1)}
       </span>
 
-      {/* Prescription */}
+      
       <div className="mt-4 border-t pt-4">
         <p className="text-sm font-medium text-gray-700 mb-2 whitespace-nowrap">
           Medical Prescription
@@ -319,7 +301,7 @@ const Appointments = () => {
     <div className="min-h-screen bg-gray-100 py-8 px-4">
       <div className="max-w-7xl mx-auto flex gap-8">
 
-        {/* Sidebar */}
+        
         <div className="w-64 bg-white border border-gray-200 rounded-xl p-4 shadow-sm h-fit">
 
           <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">
@@ -361,7 +343,7 @@ const Appointments = () => {
           </div>
         </div>
 
-        {/* Content */}
+        
         <div className="flex-1">
 
           {activeFilter === "pending" && (

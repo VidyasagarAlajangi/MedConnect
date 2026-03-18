@@ -15,7 +15,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white py-4 w-full overflow-hidden relative text-sm">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-          {/* Logo & Socials */}
+          
           <div>
             <div className="flex items-center mb-2">
               <HeartPulse className="text-[#4a90e2] w-6 h-6 mr-2" />
@@ -37,7 +37,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          
           <div>
             <h3 className="text-base font-bold mb-2">Quick Links</h3>
             <ul className="space-y-1">
@@ -59,7 +59,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact Info */}
+          
           <div>
             <h3 className="text-base font-bold mb-2">Contact Us</h3>
             <ul className="space-y-1 text-gray-400">
@@ -79,7 +79,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Section */}
+        
         <div className="border-t border-gray-800 pt-3 mt-4 text-xs text-center md:text-left">
           <p className="text-gray-400">
             © 2024 MedConnect. All rights reserved.

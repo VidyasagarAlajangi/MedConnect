@@ -15,9 +15,9 @@ const DoctorRegistrationForm = () => {
     qualifications: "",
     address: "",
     phone: "",
-    licenseNumber: "", // New field
-    photo: null, // New field for photo
-    certificate: null, // New field for certificate
+    licenseNumber: "", 
+    photo: null, 
+    certificate: null, 
   });
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,7 +56,7 @@ const DoctorRegistrationForm = () => {
         name: "",
         email: "",
         password: "",
-        phone: "", // Reset phone as well
+        phone: "", 
         specialization: "",
         experience: "",
         qualifications: "",
@@ -66,7 +66,6 @@ const DoctorRegistrationForm = () => {
         certificate: null,
       });
     } catch (error) {
-      console.error("Doctor registration error:", error);
       setMessage(error || "Registration failed. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -78,9 +77,9 @@ const DoctorRegistrationForm = () => {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/5 overflow-hidden border border-gray-100">
 
-          {/* ── Header Section ── */}
+          
           <div className="bg-[#4a90e2] px-10 py-12 text-center relative overflow-hidden">
-            {/* Soft decorative circles */}
+            
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full -ml-24 -mb-24" />
 
@@ -94,7 +93,7 @@ const DoctorRegistrationForm = () => {
             </div>
           </div>
 
-          {/* ── Status Message ── */}
+          
           {message && (
             <div className={`mx-10 mt-8 p-4 rounded-2xl border ${message.toLowerCase().includes("failed")
               ? "bg-red-50 border-red-100 text-red-700"
@@ -110,7 +109,7 @@ const DoctorRegistrationForm = () => {
 
           <form onSubmit={handleSubmit} className="px-10 py-10 space-y-10">
 
-            {/* ── Section: Login Credentials ── */}
+            
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-6 w-1 bg-blue-600 rounded-full" />
@@ -150,7 +149,7 @@ const DoctorRegistrationForm = () => {
               </div>
             </div>
 
-            {/* ── Section: Professional Bio ── */}
+            
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-6 w-1 bg-blue-600 rounded-full" />
@@ -235,7 +234,7 @@ const DoctorRegistrationForm = () => {
               </div>
             </div>
 
-            {/* ── Section: Additional Info ── */}
+            
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="h-6 w-1 bg-blue-600 rounded-full" />
@@ -267,7 +266,7 @@ const DoctorRegistrationForm = () => {
                   />
                 </div>
 
-                {/* Photo Upload */}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider ml-1">Professional Photo</label>
@@ -304,7 +303,7 @@ const DoctorRegistrationForm = () => {
               </div>
             </div>
 
-            {/* Submit Button */}
+            
             <div className="pt-6">
               <button
                 type="submit"

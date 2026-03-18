@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
-// Async thunks with improved error handling
 export const fetchAppointments = createAsyncThunk(
   "appointments/fetchAppointments",
   async (date, { rejectWithValue }) => {
@@ -34,13 +33,11 @@ export const updateAppointmentStatus = createAsyncThunk(
 
       let response;
       if (status === "confirmed") {
-        // Doctor confirms: PATCH /api/appointment/confirm/:id
         response = await axiosInstance.patch(
           `/api/appointment/confirm/${appointmentId}`,
           {}
         );
       } else {
-        // Doctor cancels: PUT /api/appointment/doctor-cancel/:id
         response = await axiosInstance.put(
           `/api/appointment/doctor-cancel/${appointmentId}`,
           {}
@@ -80,7 +77,6 @@ const appointmentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchAppointments
       .addCase(fetchAppointments.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -98,7 +94,6 @@ const appointmentSlice = createSlice({
           state.lastUpdated = null;
         }
       })
-      // Handle updateAppointmentStatus
       .addCase(updateAppointmentStatus.pending, (state) => {
         state.loading = true;
         state.error = null;

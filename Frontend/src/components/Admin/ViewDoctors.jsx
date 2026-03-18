@@ -11,7 +11,6 @@ export default function ViewDoctors() {
         const res = await axiosInstance.get("/api/admin/doctors");
         setDoctors(res.data || []);
       } catch (err) {
-        console.error("Error fetching doctors:", err);
       }
     };
     fetchDoctors();

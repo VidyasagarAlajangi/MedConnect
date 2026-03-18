@@ -3,7 +3,6 @@ import { API_BASE_URL } from "../../config/api";
 import { toast } from "react-hot-toast";
 import { Upload, Loader2, FileText, X } from "lucide-react";
 
-// --- DESIGN TOKENS ---
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
@@ -14,7 +13,6 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
   const [notes, setNotes] = useState("");
   const [btnHover, setBtnHover] = useState(false);
 
-  // --- LOGIC (UNCHANGED) ---
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type === "application/pdf") {
@@ -55,7 +53,6 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
       toast.success("Prescription uploaded successfully");
       onComplete();
     } catch (error) {
-      console.error("Error uploading prescription:", error);
       toast.error(error.message || "Failed to upload prescription");
     } finally {
       setLoading(false);
@@ -78,7 +75,7 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
         }
       `}</style>
 
-      {/* Main Card */}
+      
       <div
         className="bg-white rounded-2xl overflow-hidden border border-[#dbeafe]"
         style={{ boxShadow: "0 2px 8px rgba(74,144,226,0.10), 0 8px 32px rgba(74,144,226,0.06)" }}
@@ -86,7 +83,7 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
         <div className="h-1 w-full" style={{ backgroundColor: BRAND }} />
 
         <div className="p-8">
-          {/* Header */}
+          
           <div className="mb-8">
             <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: BRAND }}>
               Patient Portal
@@ -96,7 +93,7 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* File Upload Zone */}
+            
             <div className="space-y-2">
               <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase">
                 Prescription Document
@@ -145,7 +142,7 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
               </div>
             </div>
 
-            {/* Notes Field */}
+            
             <div className="space-y-1.5">
               <label htmlFor="notes" className="text-xs font-semibold text-slate-500 tracking-wider uppercase">
                 Additional Instructions
@@ -165,7 +162,7 @@ const PrescriptionUpload = ({ appointmentId, onComplete }) => {
               </div>
             </div>
 
-            {/* Actions */}
+            
             <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-100">
               <button
                 type="button"

@@ -18,7 +18,6 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
   const token = localStorage.getItem('token');
   const socket = useSocket(token);
 
-  // Auto-scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -27,14 +26,11 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
     scrollToBottom();
   }, [messages, otherTyping]);
 
-  // Load history and setup socket
   useEffect(() => {
     if (!appointmentId || !socket) return;
 
-    // Join room
     socket.emit('appointment:join', appointmentId);
 
-    // Fetch history
     const fetchHistory = async () => {
       try {
         const res = await axiosInstance.get(`/api/messages/${appointmentId}`);
@@ -47,7 +43,6 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
     };
     fetchHistory();
 
-    // Socket listeners
     const handleMessage = (msg) => {
       setMessages(prev => [...prev, msg]);
     };
@@ -65,7 +60,6 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
     };
   }, [appointmentId, socket, token]);
 
-  // Handle typing indicator
   const handleType = (e) => {
     setNewMessage(e.target.value);
     
@@ -93,7 +87,6 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
     socket.emit('chat:typing', { appointmentId, isTyping: false });
 
     try {
-      // Send via REST (the backend persists and emits the socket event back to us)
       await axiosInstance.post(`/api/messages/${appointmentId}`, { text });
     } catch (err) {
       toast.error('Failed to send message');
@@ -103,7 +96,7 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
 
   return (
     <div className="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl flex flex-col border border-gray-200 z-50 overflow-hidden">
-      {/* Header */}
+      
       <div className="bg-gradient-to-r from-teal-500 to-blue-600 p-3 flex justify-between items-center text-white">
         <div className="font-semibold text-sm truncate pr-2">
           Chat with {otherUserName || 'Doctor'}
@@ -113,7 +106,7 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
         </button>
       </div>
 
-      {/* Messages */}
+      
       <div className="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-3">
         {messages.length === 0 ? (
           <div className="text-center text-gray-500 text-xs my-auto">
@@ -145,7 +138,7 @@ export default function DoctorChat({ appointmentId, onClose, otherUserName }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
+      
       <form onSubmit={handleSend} className="p-3 bg-white border-t flex items-center gap-2">
         <input
           type="text"

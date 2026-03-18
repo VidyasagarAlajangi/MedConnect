@@ -12,14 +12,12 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-// --- DESIGN TOKENS ---
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
 const ITEMS_PER_PAGE = 10;
 
-// --- HELPERS ---
 const getInitials = (name = "") => name.trim().match(/[A-Za-z]/)?.[0]?.toUpperCase() || "?";
 
 export default function Patients() {
@@ -30,7 +28,6 @@ export default function Patients() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Logic Retention: API calls and Debounce
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -100,13 +97,13 @@ export default function Patients() {
       `}</style>
 
       <div className="max-w-5xl mx-auto">
-        {/* Page Header */}
+        
         <header className="mb-8">
 
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mt-1">
 
 
-            {/* Redesigned Search Bar */}
+            
             <div className="w-full sm:w-80">
               <div
                 data-field-wrap
@@ -150,7 +147,7 @@ export default function Patients() {
                 <div className="h-1 w-full" style={{ backgroundColor: BRAND }} />
                 <div className="p-5 flex flex-col sm:flex-row justify-between items-center gap-4">
                   <div className="flex items-center gap-4 w-full sm:w-auto">
-                    {/* Patient Initials Avatar */}
+                    
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-inner"
                       style={{ backgroundColor: BRAND_DARK }}
@@ -168,7 +165,7 @@ export default function Patients() {
 
                   <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
                     <button
-                      onClick={() => {/* TODO: Implement patient details view */ }}
+                      onClick={() => {}}
                       className="flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#dbeafe] text-slate-600 bg-white hover:bg-slate-50 rounded-lg text-xs font-semibold transition-colors group"
                     >
                       View Medical Record
@@ -179,7 +176,7 @@ export default function Patients() {
               </div>
             ))}
 
-            {/* Pagination Controls */}
+            
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-4 mt-10">
                 <button

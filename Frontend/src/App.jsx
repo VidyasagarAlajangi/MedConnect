@@ -33,7 +33,6 @@ const router = {
   }
 };
 
-// Map appointment status to toast style
 const STATUS_TOAST = {
   confirmed: { icon: '✅', msg: 'Your appointment has been confirmed!' },
   cancelled: { icon: '❌', msg: 'An appointment was cancelled.' },
@@ -49,11 +48,9 @@ export default function App() {
   const dispatch = useDispatch();
   const initialized = useRef(false);
 
-  // Global incoming call state
-  const [incomingCall, setIncomingCall] = useState(null); // { appointmentId, doctorName }
+  const [incomingCall, setIncomingCall] = useState(null); 
   const callTimerRef = useRef(null);
 
-  // Initialize auth state on mount
   useEffect(() => {
     const initAuth = async () => {
       if (!initialized.current) {
@@ -64,14 +61,12 @@ export default function App() {
             await dispatch(verifyToken()).unwrap();
           }
         } catch (error) {
-          console.error("Auth initialization failed:", error);
         }
       }
     };
     initAuth();
   }, [dispatch]);
 
-  // Listen for 401 events from axiosInstance and clear Redux state
   useEffect(() => {
     const handleAuthLogout = () => {
       dispatch(logout());
@@ -80,12 +75,10 @@ export default function App() {
     return () => window.removeEventListener("auth:logout", handleAuthLogout);
   }, [dispatch]);
 
-  // Socket: connect when authenticated, disconnect on logout
   useEffect(() => {
     if (isAuthenticated && token) {
       const socket = connectSocket(token);
 
-      // ── Join appointment rooms so patient can receive call notifications ──
       if (user?.role === "patient") {
         const joinAppointmentRooms = async () => {
           try {
@@ -97,10 +90,8 @@ export default function App() {
               }
             });
           } catch (_) {
-            // silently ignore — not critical
           }
         };
-        // Wait for socket to connect before joining rooms
         if (socket.connected) {
           joinAppointmentRooms();
         } else {
@@ -108,11 +99,9 @@ export default function App() {
         }
       }
 
-      // ── Global video call listener ────────────────────────────────────────
       const handleIncomingCall = ({ appointmentId, doctorName }) => {
-        if (user?.role !== "patient") return; // only patients get call notifications
+        if (user?.role !== "patient") return; 
         setIncomingCall({ appointmentId, doctorName });
-        // Auto-dismiss after 60 seconds
         clearTimeout(callTimerRef.current);
         callTimerRef.current = setTimeout(() => setIncomingCall(null), 60000);
       };
@@ -126,7 +115,6 @@ export default function App() {
       socket.on("video:call:incoming", handleIncomingCall);
       socket.on("video:call:ended", handleCallEnded);
 
-      // ── Appointment status changes ────────────────────────────────────────
       socket.on('appointment:statusChanged', (data) => {
         const info = STATUS_TOAST[data.status];
         if (info) {
@@ -139,7 +127,6 @@ export default function App() {
         }
       });
 
-      // New appointment (for doctors)
       socket.on('appointment:new', (data) => {
         if (user?.role === 'doctor') {
           toast('📅 New appointment booked!', { duration: 5000 });
@@ -151,7 +138,6 @@ export default function App() {
         }
       });
 
-      // Generic notification
       socket.on('notification:new', (data) => {
         if (!data.targetUserId || data.targetUserId === user?._id) {
           dispatch(addNotification({ type: data.type || 'info', message: data.message }));
@@ -185,7 +171,7 @@ export default function App() {
   return (
     <Router future={router.future}>
       <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
-      {/* Global incoming call overlay — appears on top of everything */}
+      
       <IncomingCallOverlay
         call={incomingCall}
         onDecline={() => {

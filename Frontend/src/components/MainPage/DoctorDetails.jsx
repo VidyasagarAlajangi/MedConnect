@@ -22,10 +22,8 @@ const DoctorDetailsPage = () => {
   useEffect(() => {
     const fetchDoctorById = async (id) => {
       try {
-        console.log('Fetching doctor with ID:', id);
         const response = await axiosInstance.get(`/api/doctors/${id}`);
 
-        console.log('Doctor API Response:', response.data);
 
         if (response.data && response.data.success && response.data.data) {
           setDoctor(response.data.data);
@@ -33,7 +31,6 @@ const DoctorDetailsPage = () => {
           setError("Doctor not found");
         }
       } catch (err) {
-        console.error('Error fetching doctor:', err);
         setError(err.message || "Failed to fetch doctor details");
       } finally {
         setLoading(false);
@@ -45,7 +42,6 @@ const DoctorDetailsPage = () => {
     }
   }, [doctorId]);
 
-  // Handle highlight from URL parameters
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const highlightType = params.get('highlight');
@@ -68,9 +64,7 @@ const DoctorDetailsPage = () => {
     toast.success(`Selected ${time} on ${date}`);
   };
 
-  // Helper function to convert 12-hour time to 24-hour format
   const convertTo24Hour = (time12h) => {
-    // Check if it's already in 24-hour format
     if (!time12h.includes('AM') && !time12h.includes('PM')) {
       return time12h;
     }
@@ -87,7 +81,6 @@ const DoctorDetailsPage = () => {
     return `${hours.padStart(2, '0')}:${minutes}`;
   };
 
-  // Helper function to convert 24-hour time to 12-hour format
   const convertTo12Hour = (time24h) => {
     const [hours, minutes] = time24h.split(':');
     const hour = parseInt(hours);
@@ -106,13 +99,10 @@ const DoctorDetailsPage = () => {
     let formattedTime;
 
     try {
-      // Format the date to YYYY-MM-DD
       try {
-        // Check if the date is already in YYYY-MM-DD format
         if (/^\d{4}-\d{2}-\d{2}$/.test(selectedDate)) {
           formattedDate = selectedDate;
         } else {
-          // Try to parse the date from MM/DD/YYYY format
           const dateParts = selectedDate.split('/');
           if (dateParts.length !== 3) {
             throw new Error('Invalid date format');
@@ -121,7 +111,6 @@ const DoctorDetailsPage = () => {
           formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         }
 
-        // Validate the date is not in the past
         const appointmentDate = new Date(formattedDate);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -131,35 +120,24 @@ const DoctorDetailsPage = () => {
           return;
         }
       } catch (dateError) {
-        console.error('Date formatting error:', dateError);
         toast.error("Invalid date format. Please try again.");
         return;
       }
 
-      // The backend book route expects:
-      // date: YYYY-MM-DD
-      // time: HH:MM (24-hour format)
-      // but it checks doctor.availableSlots which stores time in 12-hour format ("09:00 AM")
-      // We already pass the 24-hour time to backend, and backend converts it to 12-hour
-      // using convertTo12Hour before checking availability.
-      // So formattedTime MUST be correctly converted to 24-hour format here.
       try {
         formattedTime = convertTo24Hour(selectedSlot);
       } catch (timeError) {
-        console.error('Time formatting error:', timeError);
         toast.error("Invalid time format. Please try again.");
         return;
       }
 
-      // Prepare the payload
       const payload = {
         doctorId: doctor._id,
         date: formattedDate,
-        time: formattedTime, // 24-hour time
+        time: formattedTime, 
         notes: ""
       };
 
-      console.log('Booking request:', payload);
 
       const response = await axiosInstance.post("/api/appointment/book", payload);
 
@@ -174,27 +152,9 @@ const DoctorDetailsPage = () => {
         }, 2000);
       }
     } catch (err) {
-      console.error('Booking error:', err);
 
-      // Log the request details for debugging
-      console.error('Request details:', {
-        url: `${API_BASE_URL}/api/appointment/book`,
-        payload: {
-          doctorId: doctor?._id,
-          date: formattedDate,
-          time: formattedTime,
-          notes: ""
-        },
-        selectedDate,
-        selectedSlot
-      });
 
-      // Log the error response if available
       if (err.response) {
-        console.error('Error response:', {
-          status: err.response.status,
-          data: err.response.data
-        });
       }
 
       const errorMessage = err.response?.data?.message || "Failed to book appointment";
@@ -296,18 +256,18 @@ const DoctorDetailsPage = () => {
       `}</style>
       <div className="max-w-7xl mx-auto">
 
-        {/* Doctor Header */}
+        
         <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8 shadow-sm">
           <div className="flex flex-col md:flex-row gap-6">
 
-            {/* Image */}
+            
             <img
               src={doctor.img_url}
               alt={doctor.name}
               className="w-28 h-28 rounded-full object-cover border"
             />
 
-            {/* Doctor Info */}
+            
             <div className="flex-1">
               <h1 className="text-2xl font-semibold text-gray-900">
                 {doctor.name}
@@ -331,7 +291,7 @@ const DoctorDetailsPage = () => {
               </p>
             </div>
 
-            {/* Status */}
+            
             <div>
               <span
                 className={`px-3 py-1 text-sm rounded-full ${doctor.isActive
@@ -345,13 +305,13 @@ const DoctorDetailsPage = () => {
           </div>
         </div>
 
-        {/* Main Layout */}
+        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* LEFT SIDE */}
+          
           <div className="lg:col-span-2 space-y-6">
 
-            {/* About */}
+            
             <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
               <h2 className="text-lg text-[#4A90E2] font-semibold mb-3">
                 About Doctor
@@ -365,7 +325,7 @@ const DoctorDetailsPage = () => {
               </p>
             </div>
 
-            {/* Professional Details */}
+            
             <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
               <h2 className="text-lg text-[#4A90E2] font-semibold mb-4">
                 Professional Details
@@ -405,7 +365,7 @@ const DoctorDetailsPage = () => {
 
           </div>
 
-          {/* RIGHT SIDE BOOKING CARD */}
+          
           <div className="lg:sticky lg:top-8 h-fit">
 
             <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">

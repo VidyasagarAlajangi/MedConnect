@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
-// Async thunk for login
 export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password, role }, { rejectWithValue }) => {
@@ -18,8 +17,6 @@ export const login = createAsyncThunk(
 
       const { token, data } = response.data;
       
-      // Persistence handled by redux-persist primarily, 
-      // but we keep localStorage for axios interceptor and legacy support
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify({ ...data, role }));
 
@@ -35,14 +32,12 @@ export const login = createAsyncThunk(
   }
 );
 
-// Async thunk for logout
 export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
       await axiosInstance.get("/api/auth/logout");
     } catch (error) {
-      console.error("Logout API error:", error.message);
     } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
@@ -50,7 +45,6 @@ export const logout = createAsyncThunk(
   }
 );
 
-// Async thunk for patient registration
 export const registerUser = createAsyncThunk(
   "auth/register",
   async (userData, { rejectWithValue }) => {
@@ -68,7 +62,6 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Async thunk for doctor registration (handles FormData for photo)
 export const registerDoctor = createAsyncThunk(
   "auth/registerDoctor",
   async (formData, { rejectWithValue }) => {
@@ -90,7 +83,6 @@ export const registerDoctor = createAsyncThunk(
   }
 );
 
-// Async thunk for initialization (checks local storage as a fallback to persist)
 export const initializeAuth = createAsyncThunk(
   "auth/initialize",
   async (_, { rejectWithValue }) => {
@@ -110,7 +102,6 @@ export const initializeAuth = createAsyncThunk(
   }
 );
 
-// Async thunk to verify token
 export const verifyToken = createAsyncThunk(
   "auth/verifyToken",
   async (_, { rejectWithValue }) => {
@@ -139,7 +130,6 @@ const authSlice = createSlice({
     user: null,
     token: null,
     isAuthenticated: false,
-    // Only show loading if we have a token to verify; otherwise show immediately
     loading: !!localStorage.getItem("token"),
     error: null,
   },

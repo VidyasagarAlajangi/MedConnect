@@ -26,7 +26,6 @@ const DoctorAppointments = () => {
       if (!res.ok) throw new Error(data.message);
       setAppointments(data);
     } catch (error) {
-      console.error("Error fetching appointments:", error);
       toast.error("Failed to fetch appointments");
     } finally {
       setLoading(false);
@@ -38,7 +37,6 @@ const DoctorAppointments = () => {
   }, []);
 
   const handleStartCall = (appointmentId) => {
-    // Navigate within the app so auth context is preserved
     navigate(`/video-call/${appointmentId}`);
   };
 

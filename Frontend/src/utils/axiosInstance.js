@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor to add the auth token
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -22,16 +21,12 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle errors globally
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Clear localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      // Dispatch a custom event so App.jsx can clear Redux state
-      // without creating a circular dependency
       window.dispatchEvent(new Event("auth:logout"));
     }
     return Promise.reject(error);

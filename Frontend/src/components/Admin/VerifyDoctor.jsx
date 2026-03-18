@@ -7,7 +7,6 @@ const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// ── Role config ───────────────────────────────────────────────────────────────
 const ROLE = {
   admin: {
     label: "Admin",
@@ -35,7 +34,6 @@ const ROLE = {
   },
 };
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 function avatarInitial(name, fallback = "?") {
   if (!name || typeof name !== "string") return fallback;
   const letter = name.trim().match(/[A-Za-z]/)?.[0];
@@ -65,7 +63,6 @@ function EmptyState() {
   );
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
 export default function VerifyDoctor() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +74,6 @@ export default function VerifyDoctor() {
       const res = await axiosInstance.get("/api/admin/pending-doctors");
       setDoctors(res.data.doctors || []);
     } catch (err) {
-      console.error("Error fetching pending doctors:", err);
       toast.error("Failed to load pending doctors");
     } finally {
       setLoading(false);
@@ -97,7 +93,6 @@ export default function VerifyDoctor() {
         setDoctors(prev => prev.filter(d => d._id !== doctorId));
       }
     } catch (err) {
-      console.error(`Error during doctor ${action}:`, err);
       toast.error(err.response?.data?.message || `Failed to ${action} doctor`);
     } finally {
       setProcessing(null);
@@ -123,7 +118,7 @@ export default function VerifyDoctor() {
 
       <div className="fade-up">
 
-        {/* Section heading */}
+        
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
             <div
@@ -148,7 +143,7 @@ export default function VerifyDoctor() {
           )}
         </div>
 
-        {/* Loading */}
+        
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-300">
             <Loader2 size={28} className="animate-spin" />
@@ -169,7 +164,7 @@ export default function VerifyDoctor() {
                       boxShadow: "0 1px 4px rgba(74,144,226,0.07)",
                     }}
                   >
-                    {/* Header: Avatar, Name, Specialty */}
+                    
                     <div className="flex items-start gap-4 mb-5">
                       <div
                         className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold text-white flex-shrink-0"
@@ -192,7 +187,7 @@ export default function VerifyDoctor() {
                       <RoleBadge role="doctor" />
                     </div>
 
-                    {/* Details Grid */}
+                    
                     <div className="grid grid-cols-2 gap-4 mb-5 bg-slate-50 p-4 rounded-xl border border-slate-100">
                       <div>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Experience</p>
@@ -208,7 +203,7 @@ export default function VerifyDoctor() {
                       </div>
                     </div>
 
-                    {/* Certificate Preview */}
+                    
                     {doctor.certificateUrl && (
                       <div className="mb-6 p-4 rounded-xl border border-blue-100 bg-blue-50/50 flex items-center justify-between group/cert">
                         <div className="flex items-center gap-3">
@@ -231,7 +226,7 @@ export default function VerifyDoctor() {
                       </div>
                     )}
 
-                    {/* Action Buttons */}
+                    
                     <div className="flex items-center gap-3 border-t border-slate-100 pt-5">
                       <button
                         onClick={() => handleVerify(doctor._id, "reject")}

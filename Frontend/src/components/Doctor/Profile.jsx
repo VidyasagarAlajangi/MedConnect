@@ -16,12 +16,10 @@ import {
   X
 } from "lucide-react";
 
-// --- DESIGN TOKENS ---
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// --- HELPERS ---
 const getInitials = (name) => name.trim().match(/[A-Za-z]/)?.[0]?.toUpperCase() || "?";
 
 export default function Profile() {
@@ -41,7 +39,6 @@ export default function Profile() {
   });
   const [formErrors, setFormErrors] = useState({});
 
-  // --- LOGIC (UNCHANGED) ---
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -114,7 +111,6 @@ export default function Profile() {
     }
   };
 
-  // --- RENDER HELPERS ---
   if (loading && !doctorData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
@@ -154,7 +150,7 @@ export default function Profile() {
       `}</style>
 
       <div className="max-w-4xl mx-auto">
-        {/* Page Header */}
+        
         <header className="mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
 
@@ -176,7 +172,7 @@ export default function Profile() {
           <div className="h-1 w-full" style={{ backgroundColor: BRAND }} />
 
           <div className="p-8">
-            {/* Profile Summary Header */}
+            
             <div className="flex items-center gap-5 mb-10 pb-10 border-b border-slate-100">
               <div
                 className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-inner"
@@ -204,7 +200,7 @@ export default function Profile() {
             {isEditing ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Name Field */}
+                  
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase">Full Name</label>
                     <div data-field-wrap className={`flex items-center gap-3 border-[1.5px] rounded-lg px-3 transition-all ${formErrors.name ? 'border-red-500' : 'border-slate-200'} bg-slate-50`}>
@@ -220,7 +216,7 @@ export default function Profile() {
                     {formErrors.name && <p className="text-xs text-red-500 flex items-center gap-1">⚠ {formErrors.name}</p>}
                   </div>
 
-                  {/* Specialization Field */}
+                  
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase">Specialization</label>
                     <div data-field-wrap className={`flex items-center gap-3 border-[1.5px] rounded-lg px-3 transition-all ${formErrors.specialization ? 'border-red-500' : 'border-slate-200'} bg-slate-50`}>
@@ -235,7 +231,7 @@ export default function Profile() {
                     {formErrors.specialization && <p className="text-xs text-red-500 flex items-center gap-1">⚠ {formErrors.specialization}</p>}
                   </div>
 
-                  {/* Experience Field */}
+                  
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase">Experience (Years)</label>
                     <div data-field-wrap className={`flex items-center gap-3 border-[1.5px] rounded-lg px-3 transition-all ${formErrors.experience ? 'border-red-500' : 'border-slate-200'} bg-slate-50`}>
@@ -251,7 +247,7 @@ export default function Profile() {
                     {formErrors.experience && <p className="text-xs text-red-500 flex items-center gap-1">⚠ {formErrors.experience}</p>}
                   </div>
 
-                  {/* Address Field */}
+                  
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase">Clinic Address</label>
                     <div data-field-wrap className={`flex items-center gap-3 border-[1.5px] rounded-lg px-3 transition-all ${formErrors.address ? 'border-red-500' : 'border-slate-200'} bg-slate-50`}>
@@ -266,7 +262,7 @@ export default function Profile() {
                     {formErrors.address && <p className="text-xs text-red-500 flex items-center gap-1">⚠ {formErrors.address}</p>}
                   </div>
 
-                  {/* Qualifications Field */}
+                  
                   <div className="md:col-span-2 space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase">Qualifications</label>
                     <div data-field-wrap className={`flex items-start gap-3 border-[1.5px] rounded-lg px-3 transition-all ${formErrors.qualifications ? 'border-red-500' : 'border-slate-200'} bg-slate-50`}>

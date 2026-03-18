@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
-// Async thunks
 export const fetchPatientData = createAsyncThunk(
   "patient/fetchPatientData",
   async (_, { rejectWithValue }) => {
@@ -74,7 +73,6 @@ const patientSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchPatientData
       .addCase(fetchPatientData.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -87,7 +85,6 @@ const patientSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle fetchPatientAppointments
       .addCase(fetchPatientAppointments.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -100,7 +97,6 @@ const patientSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle fetchPatientMedicalHistory
       .addCase(fetchPatientMedicalHistory.pending, (state) => {
         state.loading = true;
         state.error = null;

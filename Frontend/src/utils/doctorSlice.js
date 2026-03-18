@@ -1,12 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 
-// Async thunks
 export const fetchDoctorData = createAsyncThunk(
   "doctor/fetchDoctorData",
   async (_, { rejectWithValue, getState }) => {
     try {
-      // Check if we already have the data and it's not stale
       const state = getState();
       if (state.doctor.doctorData && !state.doctor.isStale) {
         return state.doctor.doctorData;
@@ -88,7 +86,6 @@ export const updateDoctorAvailability = createAsyncThunk(
         return rejectWithValue(response.data.message || "Failed to update availability");
       }
 
-      // Backend returns the updated doctor document in response.data.data or .doctor
       return response.data.data || response.data.doctor;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Failed to update availability");
@@ -142,7 +139,6 @@ const doctorSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchDoctorData
       .addCase(fetchDoctorData.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -158,7 +154,6 @@ const doctorSlice = createSlice({
         state.error = action.payload;
         state.isStale = true;
       })
-      // Handle fetchDoctorAppointments
       .addCase(fetchDoctorAppointments.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -171,7 +166,6 @@ const doctorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle fetchDoctorPatients
       .addCase(fetchDoctorPatients.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -184,7 +178,6 @@ const doctorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle updateDoctorProfile
       .addCase(updateDoctorProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -199,7 +192,6 @@ const doctorSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Handle updateDoctorAvailability
       .addCase(updateDoctorAvailability.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -207,7 +199,6 @@ const doctorSlice = createSlice({
       .addCase(updateDoctorAvailability.fulfilled, (state, action) => {
         state.loading = false;
         if (state.doctorData) {
-          // If the backend returned the full updated doctor, replace it
           if (action.payload.availableSlots) {
              state.doctorData.availableSlots = action.payload.availableSlots;
           }

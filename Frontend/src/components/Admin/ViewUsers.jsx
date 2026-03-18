@@ -6,7 +6,6 @@ const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// ── Role config ───────────────────────────────────────────────────────────────
 const ROLE = {
   admin: {
     label: "Admin",
@@ -63,7 +62,6 @@ function EmptyState() {
   );
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
 export default function ViewUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +72,6 @@ export default function ViewUsers() {
         const res = await axiosInstance.get("/api/admin/view-users");
         setUsers(res.data.users || []);
       } catch (err) {
-        console.error("Error fetching users:", err);
       } finally {
         setLoading(false);
       }
@@ -101,7 +98,7 @@ export default function ViewUsers() {
 
       <div className="fade-up">
 
-        {/* Section heading */}
+        
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
             <div
@@ -126,7 +123,7 @@ export default function ViewUsers() {
           )}
         </div>
 
-        {/* Loading */}
+        
         {loading ? (
           <div className="flex items-center justify-center py-16 text-slate-300">
             <Loader2 size={28} className="animate-spin" />
@@ -149,7 +146,7 @@ export default function ViewUsers() {
                       boxShadow: "0 1px 4px rgba(74,144,226,0.07)",
                     }}
                   >
-                    {/* Avatar + name + role badge */}
+                    
                     <div className="flex items-center gap-3 mb-3">
                       <div
                         className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
@@ -167,7 +164,7 @@ export default function ViewUsers() {
                       </div>
                     </div>
 
-                    {/* Divider */}
+                    
                     <div className="border-t border-slate-100 pt-3">
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <Mail size={13} />

@@ -17,15 +17,12 @@ export const connectSocket = (token) => {
   });
 
   socket.on('connect', () => {
-    console.log('[Socket] Connected:', socket.id);
   });
 
   socket.on('connect_error', (err) => {
-    console.warn('[Socket] Connection error:', err.message);
   });
 
   socket.on('disconnect', (reason) => {
-    console.log('[Socket] Disconnected:', reason);
   });
 
   return socket;
@@ -37,6 +34,5 @@ export const disconnectSocket = () => {
   if (socket) {
     socket.disconnect();
     socket = null;
-    console.log('[Socket] Disconnected and cleaned up.');
   }
 };

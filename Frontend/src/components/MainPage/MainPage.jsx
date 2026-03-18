@@ -10,7 +10,7 @@ import FeaturesGrid from "./FeaturesGrid";
 export default function MainPage() {
   return (
     <div className="relative animate-fade-in">
-      {/* ── Full-page grid background ── */}
+      
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{

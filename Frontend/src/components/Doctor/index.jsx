@@ -20,13 +20,11 @@ const options = [
   { key: "availability", label: "Availability", icon: Clock },
 ];
 
-// Safe avatar initial — never shows a digit
 function avatarInitial(name, fallback = "D") {
   if (!name || typeof name !== "string") return fallback;
   return name.trim().match(/[A-Za-z]/)?.[0]?.toUpperCase() ?? fallback;
 }
 
-// ── Shield icon ───────────────────────────────────────────────────────────────
 const IconShield = () => (
   <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
     <path fillRule="evenodd" d="M8 .5a.5.5 0 0 1 .293.085l7 4.5A.5.5 0 0 1 15.5 5.5v5a.5.5 0 0 1-.207.407l-7 5A.5.5 0 0 1 8 16a.5.5 0 0 1-.293-.093l-7-5A.5.5 0 0 1 .5 10.5v-5a.5.5 0 0 1 .207-.415l7-4.5A.5.5 0 0 1 8 .5Z" clipRule="evenodd" />
@@ -51,7 +49,6 @@ export default function DoctorPanel() {
 
   if (!isAuthenticated || !user) return null;
 
-  // ── Loading ──────────────────────────────────────────────────────────────────
   if (loading) {
     return (
       <div
@@ -66,7 +63,6 @@ export default function DoctorPanel() {
     );
   }
 
-  // ── Error ────────────────────────────────────────────────────────────────────
   if (error) {
     return (
       <div
@@ -112,14 +108,14 @@ export default function DoctorPanel() {
         }
         .fade-up { animation: fadeUp .2s ease both; }
 
-        /* Hide scrollbar on mobile nav */
+        
         .nav-scroll::-webkit-scrollbar { display: none; }
         .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: BRAND_LIGHT }}>
 
-        {/* ── Sidebar ─────────────────────────────────────────────────────────── */}
+        
         <aside
           className="w-full md:w-60 md:min-h-screen bg-white flex flex-col shrink-0"
           style={{
@@ -127,10 +123,10 @@ export default function DoctorPanel() {
             boxShadow: "2px 0 12px rgba(74,144,226,0.06)",
           }}
         >
-          {/* Brand header */}
+          
 
 
-          {/* Doctor identity */}
+          
           <div
             className="px-5 py-4 border-b hidden md:flex items-center gap-3"
             style={{ borderColor: "#dbeafe" }}
@@ -149,7 +145,7 @@ export default function DoctorPanel() {
             </div>
           </div>
 
-          {/* Mobile top bar */}
+          
           <div
             className="md:hidden flex items-center justify-between px-4 py-3 border-b"
             style={{ borderColor: "#dbeafe" }}
@@ -173,7 +169,7 @@ export default function DoctorPanel() {
             </button>
           </div>
 
-          {/* Nav items */}
+          
           <nav className="flex md:flex-col overflow-x-auto nav-scroll gap-1 px-3 py-3 md:px-3 md:py-4 md:flex-1">
             {options.map((opt) => {
               const Icon = opt.icon;
@@ -198,7 +194,7 @@ export default function DoctorPanel() {
             })}
           </nav>
 
-          {/* Logout — desktop */}
+          
           <div className="hidden md:block px-3 pb-5">
             <div className="border-t border-slate-100 pt-4">
               <button
@@ -211,9 +207,9 @@ export default function DoctorPanel() {
           </div>
         </aside>
 
-        {/* ── Main content ─────────────────────────────────────────────────────── */}
+        
         <main className="flex-1 overflow-y-auto">
-          {/* Page header */}
+          
           <div
             className="bg-white px-6 py-4 border-b flex items-center justify-between"
             style={{ borderColor: "#dbeafe" }}
@@ -230,11 +226,11 @@ export default function DoctorPanel() {
               </h1>
             </div>
 
-            {/* Doctor badge — desktop only */}
+            
 
           </div>
 
-          {/* Child component */}
+          
           <div className="p-5 md:p-8 fade-up" key={selected}>
             {selected === "profile" && <Profile />}
             {selected === "appointments" && <Appointments />}

@@ -13,7 +13,7 @@ const initialState = {
     },
   ],
   chatHistory: [],
-  isOpen: false, // Optional: if we want to manage chatbot modal open state globally later
+  isOpen: false, 
 };
 
 const chatSlice = createSlice({
@@ -24,8 +24,6 @@ const chatSlice = createSlice({
       state.messages.push(action.payload);
     },
     updateChatHistory: (state, action) => {
-      // action.payload is { userMessage, botReply }
-      // Keep last 20 turns (10 exchanges) to stay within token limits
       const newHistory = [
         ...state.chatHistory,
         { role: "user", text: action.payload.userMessage },

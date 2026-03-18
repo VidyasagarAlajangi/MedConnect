@@ -36,7 +36,6 @@ const CompleteAppointment = ({ appointmentId, onComplete }) => {
       toast.success("Appointment completed successfully!");
       onComplete(data.appointment);
     } catch (error) {
-      console.error("Error completing appointment:", error);
       toast.error(error.message || "Failed to complete appointment");
     } finally {
       setLoading(false);

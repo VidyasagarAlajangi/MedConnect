@@ -19,12 +19,10 @@ import { useNavigate } from "react-router-dom";
 import useSocket from "../../utils/useSocket";
 import DoctorChat from "../MainPage/DoctorChat";
 
-// --- DESIGN TOKENS ---
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// --- HELPERS ---
 const getInitials = (name = "") => name.trim().match(/[A-Za-z]/)?.[0]?.toUpperCase() || "?";
 
 const formatDate = (dateString) => {
@@ -44,7 +42,6 @@ const formatTime = (time) => {
   return `${h12}:${minutes} ${ampm}`;
 };
 
-// --- SUB-COMPONENTS ---
 
 const StatusBadge = ({ status }) => {
   const configs = {
@@ -80,7 +77,6 @@ const SectionHeader = ({ title, icon, count }) => (
   </div>
 );
 
-// --- MAIN COMPONENT ---
 
 const Appointments = () => {
   const dispatch = useDispatch();
@@ -91,7 +87,6 @@ const Appointments = () => {
   const token = localStorage.getItem("token");
   const socket = useSocket(token);
 
-  // Logic Retention
   useEffect(() => {
     dispatch(fetchAppointments());
   }, [dispatch]);
@@ -267,7 +262,6 @@ const Appointments = () => {
   );
 };
 
-// Internal Card Component for hover state management
 const AppointmentCard = ({ app, onConfirm, onCancel, onVideo, onChat, onViewDetails }) => {
   const [btnHover, setBtnHover] = useState(null);
 

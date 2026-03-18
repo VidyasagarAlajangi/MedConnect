@@ -9,7 +9,6 @@ const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
 const IconMail = () => (
   <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
     <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793l6.598 3.185c.206.1.446.1.652 0L15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
@@ -33,7 +32,6 @@ const IconSpinner = () => (
   </svg>
 );
 
-// ── Field wrapper (matches Register) ─────────────────────────────────────────
 function Field({ label, icon, error, children }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -55,7 +53,6 @@ function Field({ label, icon, error, children }) {
   );
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -113,7 +110,7 @@ export default function Login() {
       >
         <div className="w-full max-w-md">
 
-          {/* ── Card ── */}
+          
           <div
             className="bg-white rounded-2xl overflow-hidden fade-up"
             style={{
@@ -121,10 +118,10 @@ export default function Login() {
               border: "1px solid #dbeafe",
             }}
           >
-            {/* Accent bar */}
+            
             <div className="h-1" style={{ backgroundColor: BRAND }} />
 
-            {/* Header */}
+            
             <div className="px-8 pt-7 pb-0">
 
               <h1 className="text-[22px] font-bold text-slate-800 tracking-tight leading-tight">
@@ -135,13 +132,13 @@ export default function Login() {
               </p>
             </div>
 
-            {/* Divider */}
+            
             <div className="mx-8 mt-5 border-t border-slate-100" />
 
-            {/* Form body */}
+            
             <div className="px-8 py-6">
 
-              {/* Role toggle / admin badge */}
+              
               {isAdmin ? (
                 <div
                   className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg mb-5 text-sm font-medium"
@@ -182,7 +179,7 @@ export default function Login() {
                 </div>
               )}
 
-              {/* Server error */}
+              
               {error && (
                 <div className="flex items-start gap-2 px-3.5 py-2.5 rounded-lg mb-4 text-sm text-red-600 bg-red-50 border border-red-100">
                   <span className="mt-px">⚠</span>
@@ -233,7 +230,7 @@ export default function Login() {
                   </button>
                 </div>
 
-                {/* Register link */}
+                
                 <p className="mt-6 text-center text-sm text-slate-400">
                   Don't have an account?{" "}
                   <button
@@ -251,7 +248,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Footer */}
+          
           <p className="mt-5 text-center text-xs text-slate-400 leading-relaxed">
             By signing in you agree to our{" "}
             <a
