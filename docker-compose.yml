@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: medconnect-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+    networks:
+      - medconnect-network
+
+  frontend:
+    # For a true production build, this would be an Nginx container serving the built static files.
+    # For this transition phase, we use Vite's preview mode.
+    image: node:20-alpine
+    container_name: medconnect-frontend
+    working_dir: /app
+    volumes:
+      - ./Frontend:/app
+    command: sh -c "npm install && npm run build && npm run preview -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    networks:
+      - medconnect-network
+
+networks:
+  medconnect-network:
+    driver: bridge
