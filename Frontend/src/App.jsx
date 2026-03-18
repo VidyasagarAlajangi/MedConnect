@@ -203,7 +203,7 @@ function AppContent({ user = null, isAuthenticated = false }) {
     const isAdminRoute = path.startsWith("/admin");
     const isRootRoute = path === "/";
 
-    if (!isAuthenticated && !isPublicRoute && !isVideoCallRoute && !isCompleteRoute && !isRootRoute && !path.startsWith("/doctor/") && !path.startsWith("/find-doctor")) {
+    if (!isAuthenticated && !isPublicRoute && !isVideoCallRoute && !isCompleteRoute && !isRootRoute) {
       navigate("/login", { replace: true });
       return;
     }

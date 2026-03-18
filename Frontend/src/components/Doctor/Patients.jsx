@@ -8,9 +8,13 @@ import {
   Loader2,
   User,
   Mail,
-  ChevronRight as ArrowRight
+  ChevronRight as ArrowRight,
+  X
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
@@ -27,6 +31,7 @@ export default function Patients() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -165,7 +170,7 @@ export default function Patients() {
 
                   <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
                     <button
-                      onClick={() => {}}
+                      onClick={() => setSelectedPatient(p)}
                       className="flex items-center gap-2 px-4 py-2 border-[1.5px] border-[#dbeafe] text-slate-600 bg-white hover:bg-slate-50 rounded-lg text-xs font-semibold transition-colors group"
                     >
                       View Medical Record
@@ -202,6 +207,62 @@ export default function Patients() {
             )}
           </div>
         )}
+
+        <Modal
+          isOpen={!!selectedPatient}
+          onRequestClose={() => setSelectedPatient(null)}
+          className="bg-white rounded-2xl max-w-2xl w-full mx-auto shadow-2xl outline-none overflow-hidden"
+          overlayClassName="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center p-4 z-50"
+        >
+          {selectedPatient && (
+            <div className="flex flex-col max-h-[85vh]">
+              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-800 tracking-tight">Medical Record</h2>
+                  <p className="text-sm text-slate-500 font-medium mt-0.5">{selectedPatient.user?.name}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedPatient(null)}
+                  className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <div className="px-6 py-6 overflow-y-auto space-y-6">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Contact Details</h3>
+                  <div className="flex flex-col gap-2 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="text-sm text-slate-700"><span className="font-semibold w-20 inline-block">Email:</span> {selectedPatient.user?.email}</p>
+                    <p className="text-sm text-slate-700"><span className="font-semibold w-20 inline-block">Phone:</span> {selectedPatient.user?.phone || 'Not provided'}</p>
+                    <p className="text-sm text-slate-700"><span className="font-semibold w-20 inline-block">Address:</span> {selectedPatient.address || 'Not provided'}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Medical History & Notes</h3>
+                  <div className="p-5 bg-blue-50/50 rounded-xl border border-blue-100 min-h-[120px]">
+                    {selectedPatient.medicalDetails ? (
+                      <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{selectedPatient.medicalDetails}</p>
+                    ) : (
+                      <p className="text-sm text-slate-400 italic">No medical history provided by the patient.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="px-6 py-4 border-t border-slate-100 flex justify-end bg-slate-50/50">
+                <button
+                  onClick={() => setSelectedPatient(null)}
+                  className="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors"
+                >
+                  Close Record
+                </button>
+              </div>
+            </div>
+          )}
+        </Modal>
+
       </div>
     </div>
   );

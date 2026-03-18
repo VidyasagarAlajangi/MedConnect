@@ -4,7 +4,7 @@ const Doctor = require("../models/Doctor");
 const Appointment = require("../models/Appointment");
 const { isAuthenticated, doctorAuth } = require("../middleware/Authentication");
 
-doctorrouter.get("/", async (req, res) => {
+doctorrouter.get("/", isAuthenticated, async (req, res) => {
   try {
     const {
       specialization,
@@ -221,7 +221,7 @@ doctorrouter.get("/my-patients", isAuthenticated, doctorAuth, async (req, res) =
   }
 });
 
-doctorrouter.get("/:id", async (req, res) => {
+doctorrouter.get("/:id", isAuthenticated, async (req, res) => {
   try {
     const doctorId = req.params.id;
     

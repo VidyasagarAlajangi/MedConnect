@@ -128,53 +128,47 @@ const Appointments = () => {
   const renderHorizontalCard = (appointment, isConfirmed = false) => (
     <div
       key={appointment._id}
-      className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+      className="bg-white border border-slate-100 rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row md:items-center md:justify-between gap-5 relative overflow-hidden"
     >
-      
-      <div className="flex-1 space-y-2">
+      <div className={`absolute top-0 left-0 w-1.5 h-full ${appointment.status === "confirmed" ? "bg-green-500" : appointment.status === "pending" ? "bg-yellow-400" : "bg-slate-300"}`}></div>
+      <div className="flex-1 space-y-3 pl-2">
 
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">
-            {appointment.doctor?.name || "Doctor"}
-          </h3>
-          <p className="text-sm text-gray-500">
-            {appointment.doctor?.specialization || ""}
-          </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h3 className="text-lg md:text-xl font-bold text-slate-800 tracking-tight">
+              {appointment.doctor?.name || "Doctor"}
+            </h3>
+            <p className="text-sm text-blue-600 font-medium mt-0.5">
+              {appointment.doctor?.specialization || ""}
+            </p>
+          </div>
+          <span
+            className={`inline-flex items-center text-xs font-bold px-3 py-1 rounded-full border ${appointment.status === "confirmed"
+                ? "bg-green-50 text-green-700 border-green-200 shadow-[0_0_10px_rgba(74,222,128,0.2)]"
+                : appointment.status === "pending"
+                  ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+                  : "bg-slate-50 text-slate-600 border-slate-200"
+              }`}
+          >
+            {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+          </span>
         </div>
 
-        <div className="flex items-center gap-5 text-sm text-gray-600">
-
-          <span className="flex items-center gap-1">
-            <Calendar className="w-4 h-4 text-gray-400" />
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-600 bg-slate-50 w-fit px-4 py-2.5 rounded-xl border border-slate-100">
+          <span className="flex items-center gap-2 font-medium">
+            <Calendar className="w-4 h-4 text-blue-500" />
             {appointment.date?.slice(0, 10)}
           </span>
-
-          <span className="flex items-center gap-1">
-            <Clock className="w-4 h-4 text-gray-400" />
+          <span className="flex items-center gap-2 font-medium">
+            <Clock className="w-4 h-4 text-amber-500" />
             {appointment.time}
           </span>
-
         </div>
-
-        <span
-          className={`inline-block text-xs font-medium px-3 py-1 rounded-full ${appointment.status === "confirmed"
-              ? "bg-green-100 text-green-700"
-              : appointment.status === "pending"
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-gray-100 text-gray-600"
-            }`}
-        >
-          {appointment.status.charAt(0).toUpperCase() +
-            appointment.status.slice(1)}
-        </span>
-
       </div>
 
-      
-      <div className="flex flex-wrap gap-2">
-
+      <div className="flex flex-row flex-wrap gap-2 md:pl-4 md:border-l md:border-slate-100 w-full md:w-auto mt-2 md:mt-0">
         <button
-          className="flex items-center gap-2 px-3 py-1.5 text-sm border border-red-200 text-red-600 rounded-md hover:bg-red-50 transition"
+          className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold border border-red-200 text-red-600 bg-red-50 hover:bg-red-600 hover:text-white rounded-xl transition-colors duration-200"
           onClick={() => handleCancel(appointment._id)}
         >
           <XCircle className="w-4 h-4" />
@@ -183,17 +177,17 @@ const Appointments = () => {
 
         {isConfirmed && userRole === "doctor" && (
           <button
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-[#4A90E2] text-white rounded-md hover:bg-[#357ABD] transition"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold bg-blue-600 text-white rounded-xl hover:bg-blue-700 shadow-sm shadow-blue-500/30 transition-all duration-200"
             onClick={() => handleVideoCall(appointment)}
           >
             <Video className="w-4 h-4" />
-            Start Call
+            Call
           </button>
         )}
 
         {isConfirmed && (
           <button
-            className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-200 rounded-md hover:border-[#4A90E2] hover:text-[#4A90E2] transition"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold border border-slate-200 text-slate-700 hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 bg-white rounded-xl transition-all duration-200"
             onClick={() =>
               setActiveChat({
                 id: appointment._id,
@@ -213,108 +207,101 @@ const Appointments = () => {
   const renderAppointmentCard = (appointment) => (
     <div
       key={appointment._id}
-      className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition"
+      className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 transform md:hover:-translate-y-1 relative overflow-hidden"
     >
+      <div className={`absolute top-0 right-0 w-32 h-32 opacity-20 bg-gradient-to-br ${appointment.status === "completed" ? "from-blue-200" : "from-red-200"} to-transparent blur-2xl rounded-bl-[100px] pointer-events-none`}></div>
 
-      
-      <div className="mb-4">
-
-        <h2 className="text-lg font-semibold text-gray-900">
-          {appointment.doctor?.name || "Doctor"}
-        </h2>
-
-        <p className="text-sm text-gray-500">
-          {appointment.doctor?.specialization || ""}
-        </p>
-
+      <div className="flex justify-between items-start mb-5 relative z-10">
+        <div>
+          <h2 className="text-xl font-bold text-slate-800 tracking-tight">
+            {appointment.doctor?.name || "Doctor"}
+          </h2>
+          <p className="text-sm font-medium text-blue-600 mt-1">
+            {appointment.doctor?.specialization || ""}
+          </p>
+        </div>
+        <span
+          className={`shrink-0 inline-flex items-center text-[11px] font-bold px-3 py-1.5 rounded-full border tracking-wide uppercase ${appointment.status === "completed"
+              ? "bg-blue-50 text-blue-700 border-blue-200 shadow-[0_0_10px_rgba(59,130,246,0.15)]"
+              : appointment.status === "cancelled"
+                ? "bg-red-50 text-red-700 border-red-200 shadow-[0_0_10px_rgba(239,68,68,0.15)]"
+                : "bg-slate-50 text-slate-600 border-slate-200"
+            }`}
+        >
+          {appointment.status}
+        </span>
       </div>
 
-      
-      <div className="space-y-3 text-sm text-gray-600 mb-4">
-
-        <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-gray-400" />
+      <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-100 text-sm text-slate-700 mb-5 relative z-10">
+        <div className="flex items-center gap-3 font-medium">
+          <div className="p-1.5 bg-white rounded-md shadow-sm border border-slate-100"><Calendar className="w-4 h-4 text-blue-500" /></div>
           {appointment.date?.slice(0, 10)}
         </div>
-
-        <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-gray-400" />
+        <div className="flex items-center gap-3 font-medium">
+          <div className="p-1.5 bg-white rounded-md shadow-sm border border-slate-100"><Clock className="w-4 h-4 text-amber-500" /></div>
           {appointment.time}
         </div>
-
-        <div className="flex items-start gap-2">
-          <User className="w-4 h-4 text-gray-400 mt-0.5" />
-          <p>{appointment.notes || "No notes provided"}</p>
+        <div className="flex items-start gap-3 mt-1">
+          <div className="p-1.5 bg-white rounded-md shadow-sm border border-slate-100 mt-0.5"><User className="w-4 h-4 text-emerald-500" /></div>
+          <p className="leading-relaxed text-slate-600">{appointment.notes || "No notes provided"}</p>
         </div>
-
       </div>
 
-      
-      <span
-        className={`inline-block text-xs font-medium px-3 py-1 rounded-full mb-4 ${appointment.status === "completed"
-            ? "bg-blue-100 text-blue-700"
-            : appointment.status === "cancelled"
-              ? "bg-red-100 text-red-700"
-              : "bg-gray-100 text-gray-600"
-          }`}
-      >
-        {appointment.status.charAt(0).toUpperCase() +
-          appointment.status.slice(1)}
-      </span>
-
-      
-      <div className="mt-4 border-t pt-4">
-        <p className="text-sm font-medium text-gray-700 mb-2 whitespace-nowrap">
+      <div className="mt-5 border-t border-slate-100 pt-5 relative z-10">
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
           Medical Prescription
         </p>
 
         {appointment.prescription ? (
-          <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100 group/presc">
-            <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-blue-600 shadow-sm">
-              {appointment.prescription.endsWith('.pdf') ? <FileText size={20} /> : <div className="w-8 h-8 rounded overflow-hidden"><img src={appointment.prescription} alt="" className="w-full h-full object-cover" /></div>}
+          <div className="flex items-center gap-3 p-2.5 bg-blue-50/50 rounded-xl border border-blue-100 hover:border-blue-300 hover:bg-blue-50 transition-colors">
+            <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center text-blue-600 shadow-sm border border-blue-50 shrink-0">
+              {appointment.prescription.endsWith('.pdf') ? <FileText size={22} className="text-blue-500" /> : <div className="w-full h-full rounded-lg overflow-hidden border border-slate-100"><img src={appointment.prescription} alt="Prescription" className="w-full h-full object-cover" /></div>}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-slate-800 truncate">Prescription Document</p>
-              <p className="text-[10px] text-blue-500 font-bold uppercase tracking-tight">Available for view</p>
+              <p className="text-sm font-bold text-slate-800 truncate tracking-tight pr-2">Prescription Document</p>
+              <p className="text-[10px] text-blue-500 font-bold uppercase tracking-tight mt-0.5">Click view to open</p>
             </div>
             <a
               href={appointment.prescription}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm border border-blue-100"
+              className="p-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all focus:ring-4 focus:ring-blue-100 shrink-0"
               title="View Prescription"
             >
-              <FileText size={16} />
+              <FileText size={18} />
             </a>
           </div>
         ) : (
-          <p className="text-sm text-gray-400 italic">
-            No prescription uploaded yet.
-          </p>
+          <div className="flex items-center justify-center p-4 rounded-xl border border-dashed border-slate-200 bg-slate-50 text-slate-400">
+            <p className="text-sm font-medium">No prescription uploaded</p>
+          </div>
         )}
       </div>
-
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <div className="max-w-7xl mx-auto flex gap-8">
+    <div className="min-h-screen bg-slate-50 py-6 md:py-8 px-4 sm:px-6">
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 md:gap-8">
 
         
-        <div className="w-64 bg-white border border-gray-200 rounded-xl p-4 shadow-sm h-fit">
+        <div className="w-full md:w-64 bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm h-fit shrink-0">
 
-          <h3 className="text-sm font-semibold text-gray-500 uppercase mb-4">
+          <h3 className="text-xs font-bold text-slate-400 tracking-wider uppercase mb-3 md:mb-5 px-1">
             Appointments
           </h3>
 
-          <div className="space-y-2">
+          <div className="flex flex-row md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0 hide-scrollbar">
 
             <button
               onClick={() => setActiveFilter("pending")}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm ${activeFilter === "pending"
-                ? "bg-[#4A90E2] text-white"
-                : "hover:bg-gray-100 text-gray-700"
+              className={`flex-1 md:flex-none text-center md:text-left whitespace-nowrap px-4 py-2.5 md:py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm ${activeFilter === "pending"
+                ? "bg-blue-600 text-white shadow-blue-500/30 scale-100"
+                : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-800 border border-slate-100"
                 }`}
             >
               Pending
@@ -322,9 +309,9 @@ const Appointments = () => {
 
             <button
               onClick={() => setActiveFilter("confirmed")}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm ${activeFilter === "confirmed"
-                ? "bg-[#4A90E2] text-white"
-                : "hover:bg-gray-100 text-gray-700"
+              className={`flex-1 md:flex-none text-center md:text-left whitespace-nowrap px-4 py-2.5 md:py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm ${activeFilter === "confirmed"
+                ? "bg-blue-600 text-white shadow-blue-500/30 scale-100"
+                : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-800 border border-slate-100"
                 }`}
             >
               Confirmed
@@ -332,9 +319,9 @@ const Appointments = () => {
 
             <button
               onClick={() => setActiveFilter("past")}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm ${activeFilter === "past"
-                ? "bg-[#4A90E2] text-white"
-                : "hover:bg-gray-100 text-gray-700"
+              className={`flex-1 md:flex-none text-center md:text-left whitespace-nowrap px-4 py-2.5 md:py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm ${activeFilter === "past"
+                ? "bg-blue-600 text-white shadow-blue-500/30 scale-100"
+                : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-800 border border-slate-100"
                 }`}
             >
               Past
@@ -344,7 +331,7 @@ const Appointments = () => {
         </div>
 
         
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
 
           {activeFilter === "pending" && (
             <>

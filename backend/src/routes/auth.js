@@ -178,6 +178,10 @@ authrouter.post("/login", async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid email or password" });
     }
 
+    if (role && user.role !== role) {
+      return res.status(403).json({ success: false, message: `Access denied. Please log in as a ${user.role}.` });
+    }
+
     const isPasswordValid = await user.validatePassword(password);
     if (!isPasswordValid) {
       return res.status(400).json({ success: false, message: "Invalid email or password" });
@@ -186,6 +190,14 @@ authrouter.post("/login", async (req, res) => {
     await ensureProfile(user);
 
     const token = await user.getJWT();
+    let extraData = {};
+    if (user.role === 'patient') {
+      const patientData = await Patient.findOne({ user: user._id });
+      if (patientData) extraData = { address: patientData.address, medicalDetails: patientData.medicalDetails };
+    } else if (user.role === 'doctor') {
+      const doctorData = await Doctor.findOne({ user: user._id });
+      if (doctorData) extraData = { address: doctorData.address, specialization: doctorData.specialization };
+    }
 
     res.json({
       success: true,
@@ -196,7 +208,8 @@ authrouter.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        phone: user.phone
+        phone: user.phone,
+        ...extraData
       }
     });
   } catch (error) {
@@ -212,6 +225,15 @@ authrouter.get("/verify", isAuthenticated, async (req, res) => {
       return res.status(401).json({ success: false, message: "User not found" });
     }
 
+    let extraData = {};
+    if (user.role === 'patient') {
+      const patientData = await Patient.findOne({ user: user._id });
+      if (patientData) extraData = { address: patientData.address, medicalDetails: patientData.medicalDetails };
+    } else if (user.role === 'doctor') {
+      const doctorData = await Doctor.findOne({ user: user._id });
+      if (doctorData) extraData = { address: doctorData.address, specialization: doctorData.specialization };
+    }
+
     res.json({
       success: true,
       message: "Token is valid",
@@ -220,7 +242,8 @@ authrouter.get("/verify", isAuthenticated, async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        phone: user.phone
+        phone: user.phone,
+        ...extraData
       }
     });
   } catch (error) {
