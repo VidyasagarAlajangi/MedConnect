@@ -102,6 +102,10 @@ app.use('/api/video', videoRoutes);
 app.use('/api/messages', messagesRouter);
 app.use('/api/chat', chatAIRouter);
 
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'MedConnect API is running smoothly' });
+});
+
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
