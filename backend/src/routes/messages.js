@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Message = require('../models/Message');
 const Appointment = require('../models/Appointment');
-const Doctor = require('../models/doctor');
+const Doctor = require('../models/Doctor');
 const Patient = require('../models/patient');
 const { isAuthenticated } = require('../middleware/Authentication');
 const { emitAppointmentStatus } = require('../sockets/socketManager');
 const mongoose = require('mongoose');
 
-// Validate that the requesting user is part of this appointment
 const verifyAppointmentAccess = async (req, res, next) => {
   try {
     const { appointmentId } = req.params;
@@ -43,12 +42,10 @@ const verifyAppointmentAccess = async (req, res, next) => {
     req.appointment = appointment;
     next();
   } catch (err) {
-    console.error('[messages] verifyAppointmentAccess error:', err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
-// GET /api/messages/:appointmentId — fetch message history
 router.get('/:appointmentId', isAuthenticated, verifyAppointmentAccess, async (req, res) => {
   try {
     const { appointmentId } = req.params;
@@ -61,7 +58,6 @@ router.get('/:appointmentId', isAuthenticated, verifyAppointmentAccess, async (r
       .limit(limit)
       .lean();
 
-    // Mark unread messages as read
     await Message.updateMany(
       { appointmentId, senderId: { $ne: req.user._id }, readAt: null },
       { $set: { readAt: new Date() } }
@@ -69,16 +65,14 @@ router.get('/:appointmentId', isAuthenticated, verifyAppointmentAccess, async (r
 
     res.json({
       success: true,
-      data: messages.reverse(), // oldest first
+      data: messages.reverse(), 
       page,
     });
   } catch (err) {
-    console.error('[messages] GET error:', err);
     res.status(500).json({ success: false, message: 'Failed to fetch messages' });
   }
 });
 
-// POST /api/messages/:appointmentId — persist a message (REST fallback)
 router.post('/:appointmentId', isAuthenticated, verifyAppointmentAccess, async (req, res) => {
   try {
     const { appointmentId } = req.params;
@@ -98,7 +92,6 @@ router.post('/:appointmentId', isAuthenticated, verifyAppointmentAccess, async (
 
     await message.save();
 
-    // Also emit via socket if io is available
     const io = req.app.get('io');
     if (io) {
       io.to(`appointment:${appointmentId}`).emit('chat:message', {
@@ -114,7 +107,6 @@ router.post('/:appointmentId', isAuthenticated, verifyAppointmentAccess, async (
 
     res.status(201).json({ success: true, data: message });
   } catch (err) {
-    console.error('[messages] POST error:', err);
     res.status(500).json({ success: false, message: 'Failed to send message' });
   }
 });

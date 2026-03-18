@@ -3,7 +3,6 @@ const chatRouter = express.Router();
 const Chat = require("../models/Chat");
 const { patientAuth } = require("../middleware/Authentication");
 
-// Save chat message
 chatRouter.post("/messages", patientAuth, async (req, res) => {
   try {
     const { text, sender } = req.body;
@@ -28,7 +27,6 @@ chatRouter.post("/messages", patientAuth, async (req, res) => {
   }
 });
 
-// Get chat history
 chatRouter.get("/history", patientAuth, async (req, res) => {
   try {
     const userId = req.user._id;

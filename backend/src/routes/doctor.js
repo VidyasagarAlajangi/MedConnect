@@ -1,11 +1,9 @@
 const express = require("express");
 const doctorrouter = express.Router();
-const Doctor = require("../models/doctor");
+const Doctor = require("../models/Doctor");
 const Appointment = require("../models/Appointment");
 const { isAuthenticated, doctorAuth } = require("../middleware/Authentication");
 
-// REMOVED global authentication middleware to allow public access to GET / (doctors list)
-// Get all doctors
 doctorrouter.get("/", async (req, res) => {
   try {
     const {
@@ -18,10 +16,9 @@ doctorrouter.get("/", async (req, res) => {
       sortBy,
     } = req.query;
 
-    const filter = { isActive: true }; // Only show active doctors by default
+    const filter = { isActive: true }; 
 
     if (specialization) {
-      // Make the specialization search case-insensitive and more flexible
       filter.specialization = { 
         $regex: new RegExp(specialization.replace(/\s+/g, '\\s*'), 'i') 
       };
@@ -77,7 +74,6 @@ doctorrouter.get("/", async (req, res) => {
       .select('name specialization experience address Rating img_url availableSlots About')
       .sort(sort);
 
-    // Ensure each doctor has the required fields
     const formattedDoctors = doctors.map(doctor => ({
       _id: doctor._id,
       name: doctor.name || 'Dr. Unknown',
@@ -96,7 +92,6 @@ doctorrouter.get("/", async (req, res) => {
       data: formattedDoctors
     });
   } catch (error) {
-    console.error("Error fetching doctors:", error);
     res.status(500).json({ 
       success: false, 
       message: "Failed to fetch doctors",
@@ -105,7 +100,6 @@ doctorrouter.get("/", async (req, res) => {
   }
 });
 
-// Get doctor's profile
 doctorrouter.get("/get-doctor-profile", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ user: req.user.id })
@@ -124,7 +118,6 @@ doctorrouter.get("/get-doctor-profile", isAuthenticated, doctorAuth, async (req,
       data: doctor 
     });
   } catch (error) {
-    console.error("Error fetching doctor profile:", error);
     res.status(500).json({ 
       success: false,
       message: error.message 
@@ -132,14 +125,11 @@ doctorrouter.get("/get-doctor-profile", isAuthenticated, doctorAuth, async (req,
   }
 });
 
-// Get doctor's appointments
 doctorrouter.get("/my-appointments", isAuthenticated, doctorAuth, async (req, res) => {
   try {
-    console.log("Fetching appointments for doctor:", req.user.id);
     
     const doctor = await Doctor.findOne({ user: req.user.id });
     if (!doctor) {
-      console.log("Doctor not found for user:", req.user.id);
       return res.status(404).json({ 
         success: false,
         message: "Doctor not found" 
@@ -153,10 +143,8 @@ doctorrouter.get("/my-appointments", isAuthenticated, doctorAuth, async (req, re
       })
       .sort({ date: -1 });
 
-    console.log(`Found ${appointments.length} appointments for doctor`);
 
-    // Add cache control headers
-    res.set('Cache-Control', 'private, max-age=300'); // Cache for 5 minutes
+    res.set('Cache-Control', 'private, max-age=300'); 
     res.set('ETag', `"${doctor._id}-${appointments.length}"`);
 
     res.json({ 
@@ -165,7 +153,6 @@ doctorrouter.get("/my-appointments", isAuthenticated, doctorAuth, async (req, re
       timestamp: Date.now()
     });
   } catch (error) {
-    console.error("Error fetching doctor appointments:", error);
     res.status(500).json({ 
       success: false,
       message: "Failed to fetch appointments" 
@@ -173,7 +160,6 @@ doctorrouter.get("/my-appointments", isAuthenticated, doctorAuth, async (req, re
   }
 });
 
-// Get doctor's patients
 doctorrouter.get("/my-patients", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ user: req.user.id });
@@ -188,10 +174,8 @@ doctorrouter.get("/my-patients", isAuthenticated, doctorAuth, async (req, res) =
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search || "";
 
-    // Build the query for appointments
     const appointmentQuery = { doctor: doctor._id };
     
-    // Get appointments with pagination
     const appointments = await Appointment.find(appointmentQuery)
       .populate({
         path: "patient",
@@ -210,13 +194,10 @@ doctorrouter.get("/my-patients", isAuthenticated, doctorAuth, async (req, res) =
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    // Get total count for pagination
     const totalAppointments = await Appointment.countDocuments(appointmentQuery);
 
-    // Filter out appointments where patient or user is null (due to search)
     const validAppointments = appointments.filter(app => app.patient && app.patient.user);
 
-    // Get unique patients
     const uniquePatients = {};
     validAppointments.forEach(app => {
       if (app.patient && app.patient._id) {
@@ -232,7 +213,6 @@ doctorrouter.get("/my-patients", isAuthenticated, doctorAuth, async (req, res) =
       totalPages: Math.ceil(totalAppointments / limit)
     });
   } catch (error) {
-    console.error("Error fetching doctor's patients:", error);
     res.status(500).json({ 
       success: false,
       message: "Failed to fetch patients",
@@ -241,12 +221,10 @@ doctorrouter.get("/my-patients", isAuthenticated, doctorAuth, async (req, res) =
   }
 });
 
-// Get a single doctor by ID (this should be after all specific routes)
 doctorrouter.get("/:id", async (req, res) => {
   try {
     const doctorId = req.params.id;
     
-    // Validate if the ID is a valid MongoDB ObjectId
     if (!doctorId.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({
         success: false,
@@ -270,7 +248,6 @@ doctorrouter.get("/:id", async (req, res) => {
       data: doctor
     });
   } catch (error) {
-    console.error("Error fetching doctor:", error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -278,7 +255,6 @@ doctorrouter.get("/:id", async (req, res) => {
   }
 });
 
-// Update doctor availability
 doctorrouter.put("/update-availability", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ user: req.user.id });
@@ -295,7 +271,6 @@ doctorrouter.put("/update-availability", isAuthenticated, doctorAuth, async (req
   }
 });
 
-// Update doctor address
 doctorrouter.patch("/update-address", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const { address } = req.body;
@@ -314,7 +289,6 @@ doctorrouter.patch("/update-address", isAuthenticated, doctorAuth, async (req, r
   }
 });
 
-// Update doctor profile
 doctorrouter.put("/update-profile", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ user: req.user.id });
@@ -332,7 +306,6 @@ doctorrouter.put("/update-profile", isAuthenticated, doctorAuth, async (req, res
   }
 });
 
-// Confirm appointment
 doctorrouter.put("/confirm-appointment/:id", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);
@@ -350,7 +323,6 @@ doctorrouter.put("/confirm-appointment/:id", isAuthenticated, doctorAuth, async 
   }
 });
 
-// Cancel appointment
 doctorrouter.put("/cancel-appointment/:id", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id);

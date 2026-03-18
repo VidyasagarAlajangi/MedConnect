@@ -1,13 +1,12 @@
 const express = require("express");
 const adminrouter = express.Router();
 const User = require("../models/User");
-const Doctor = require("../models/doctor");
+const Doctor = require("../models/Doctor");
 const Patient = require("../models/patient");
 
 const Appointment = require("../models/Appointment");
 const { isAuthenticated, adminAuth } = require("../middleware/Authentication");
 
-// Admin adds a new doctor
 adminrouter.post("/add-doctor", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const { name, email, password, specialization, experience, qualifications, address } = req.body;
@@ -37,7 +36,6 @@ adminrouter.post("/add-doctor", isAuthenticated, adminAuth, async (req, res) => 
   }
 });
 
-// Admin deletes a doctor
 adminrouter.delete("/delete-doctor/:doctorId", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
@@ -46,7 +44,6 @@ adminrouter.delete("/delete-doctor/:doctorId", isAuthenticated, adminAuth, async
       return res.status(404).json({ message: "Doctor not found" });
     }
     await Doctor.findByIdAndDelete(doctorId);
-    // doctor.user contains the User ObjectId
     await User.findByIdAndDelete(doctor.user);
     res.json({ message: "Doctor deleted successfully" });
   } catch (error) {
@@ -54,7 +51,6 @@ adminrouter.delete("/delete-doctor/:doctorId", isAuthenticated, adminAuth, async
   }
 });
 
-// Admin gets all doctors
 adminrouter.get("/doctors", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const doctors = await Doctor.find().populate("user", "name email");
@@ -64,7 +60,6 @@ adminrouter.get("/doctors", isAuthenticated, adminAuth, async (req, res) => {
   }
 });
 
-// Admin gets all patients
 adminrouter.get("/patients", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const patients = await User.find({ role: "patient" }).select("-password");
@@ -74,7 +69,6 @@ adminrouter.get("/patients", isAuthenticated, adminAuth, async (req, res) => {
   }
 });
 
-// Admin updates doctor availability
 adminrouter.patch("/doctors/:doctorId/availability", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
@@ -91,7 +85,6 @@ adminrouter.patch("/doctors/:doctorId/availability", isAuthenticated, adminAuth,
   }
 });
 
-// Admin views all appointments
 adminrouter.get("/view-appointments", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const appointments = await Appointment.find()
@@ -111,7 +104,6 @@ adminrouter.get("/view-appointments", isAuthenticated, adminAuth, async (req, re
   }
 });
 
-// Admin views all users
 adminrouter.get("/view-users", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -121,7 +113,6 @@ adminrouter.get("/view-users", isAuthenticated, adminAuth, async (req, res) => {
   }
 });
 
-// Get pending doctors
 adminrouter.get("/pending-doctors", isAuthenticated, adminAuth, async (req, res) => {
   try {
     const pendingDoctors = await Doctor.find({ isActive: false }).populate("user");
@@ -131,10 +122,9 @@ adminrouter.get("/pending-doctors", isAuthenticated, adminAuth, async (req, res)
   }
 });
 
-// Verify doctor (approve or reject)
 adminrouter.patch("/verify-doctor/:doctorId", isAuthenticated, adminAuth, async (req, res) => {
   try {
-    const { action } = req.body; // 'approve' or 'reject'
+    const { action } = req.body; 
     const doctorId = req.params.doctorId;
     const doctor = await Doctor.findById(doctorId).populate("user");
 

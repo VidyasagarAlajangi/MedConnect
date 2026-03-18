@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
-const Doctor = require("./models/Doctor"); // Adjust the path if needed
+const Doctor = require("./models/Doctor"); 
 
 mongoose.connect('mongodb+srv://brkoushal17:aDWDtcO8qGaY3gOo@clustermed.k7vjo.mongodb.net/telemed', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
-  console.log("Database connected successfully");
 }).catch((error) => {
-  console.error("Database connection error: ", error);
 });
 
 
@@ -63,7 +61,6 @@ const sampleDoctors = [
   }
 ];
 
-// Adding 10 more sample doctors with varied details
 for (let i = 5; i < 15; i++) {
   sampleDoctors.push({
     user: `65fd1a3c5c7b1a001d2e8f${i.toString().padStart(2, "0")}`,
@@ -78,9 +75,7 @@ for (let i = 5; i < 15; i++) {
 
 Doctor.insertMany(sampleDoctors)
   .then(() => {
-    console.log("Sample doctors inserted successfully");
     mongoose.connection.close();
   })
   .catch((error) => {
-    console.error("Error inserting doctors: ", error);
   });

@@ -35,7 +35,7 @@ const appointmentSchema = new mongoose.Schema(
       default: null,
     },
     prescription: {
-      type: String, // URL to the uploaded prescription file
+      type: String, 
       default: null,
     },
     notes: {

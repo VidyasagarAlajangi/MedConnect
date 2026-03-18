@@ -17,7 +17,6 @@ const patientSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
-    // You can add more patient-specific fields here as needed
     medicalHistory: [
       {
         condition: String,

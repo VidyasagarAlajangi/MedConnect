@@ -1,15 +1,13 @@
 const express = require("express");
 const userRouter = express.Router();
 const User = require("../models/User");
-const Patient = require("../models/Patient");
+const Patient = require("../models/patient");
 const { isAuthenticated } = require("../middleware/Authentication");
 
-// Update user profile
 userRouter.put("/profile", isAuthenticated, async (req, res) => {
   try {
     const { name, phone, address, medicalDetails } = req.body;
 
-    // Update user data
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { name, phone },
@@ -23,10 +21,8 @@ userRouter.put("/profile", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Check if this user has an associated patient record
     let patient = await Patient.findOne({ user: req.user.id });
     
-    // Update or create patient-specific data if needed
     if (patient) {
       patient = await Patient.findOneAndUpdate(
         { user: req.user.id },
@@ -34,7 +30,6 @@ userRouter.put("/profile", isAuthenticated, async (req, res) => {
         { new: true }
       );
     } else if (req.user.role === "patient") {
-      // Create new patient record if it doesn't exist
       patient = await Patient.create({
         user: req.user.id,
         address,
@@ -42,7 +37,6 @@ userRouter.put("/profile", isAuthenticated, async (req, res) => {
       });
     }
 
-    // Prepare the response data
     const userData = {
       ...updatedUser.toObject(),
       address: patient?.address || "",
@@ -57,7 +51,6 @@ userRouter.put("/profile", isAuthenticated, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error updating profile:", error);
     res.status(500).json({
       success: false,
       message: error.message || "Failed to update profile",

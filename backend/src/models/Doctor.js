@@ -20,7 +20,7 @@ try {
       experience: { type: Number, required: true },
       address: { type: String, required: true },
       licenseNumber: { type: String },
-      certificateUrl: { type: String }, // URL to the uploaded certificate
+      certificateUrl: { type: String }, 
       photo: { type: String }, 
       availableSlots: [{
         date: String,

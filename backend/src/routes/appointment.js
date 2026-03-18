@@ -9,7 +9,6 @@ const upload = require("../utils/fileUpload");
 
 const router = express.Router();
 
-// Helper function to convert 24-hour time to 12-hour format
 const convertTo12Hour = (time24h) => {
   const [hours, minutes] = time24h.split(':');
   const hour = parseInt(hours, 10);
@@ -18,10 +17,9 @@ const convertTo12Hour = (time24h) => {
   return `${hour12.toString().padStart(2, '0')}:${minutes} ${period}`;
 };
 
-// Helper function to convert 12-hour format to 24-hour format
 const convertTo24HourObj = (timeStr) => {
   if (!timeStr.includes('AM') && !timeStr.includes('PM')) {
-    return timeStr; // Already 24h
+    return timeStr; 
   }
   const [time, modifier] = timeStr.trim().split(" ");
   let [hours, minutes] = time.split(":");
@@ -36,13 +34,11 @@ const convertTo24HourObj = (timeStr) => {
   return `${hours.padStart(2, '0')}:${minutes}`;
 };
 
-// Helper: emit status changes via socket
 const emitStatus = (req, appointmentId, status, extra = {}) => {
   const io = req.app.get('io');
   if (io) emitAppointmentStatus(io, appointmentId.toString(), status, extra);
 };
 
-// 🔹 Patient views their appointments
 router.get("/my-appointments", isAuthenticated, patientAuth, async (req, res) => {
   try {
     const patient = await Patient.findOne({ user: req.user.id });
@@ -91,12 +87,10 @@ router.get("/my-appointments", isAuthenticated, patientAuth, async (req, res) =>
 
     res.json({ success: true, data: transformedAppointments });
   } catch (error) {
-    console.error("Error fetching patient appointments:", error);
     res.status(500).json({ success: false, message: "Failed to fetch appointments", error: error.message });
   }
 });
 
-// 🔹 Doctor views their appointments
 router.get("/doctor-appointments", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ user: req.user.id });
@@ -141,12 +135,10 @@ router.get("/doctor-appointments", isAuthenticated, doctorAuth, async (req, res)
 
     res.json({ success: true, data: transformedAppointments });
   } catch (error) {
-    console.error("Error fetching doctor appointments:", error);
     res.status(500).json({ success: false, message: "Failed to fetch appointments", error: error.message });
   }
 });
 
-// 🔹 Patient cancels an appointment
 router.put("/cancel/:appointmentId", isAuthenticated, patientAuth, async (req, res) => {
   try {
     const patient = await Patient.findOne({ user: req.user.id });
@@ -168,7 +160,6 @@ router.put("/cancel/:appointmentId", isAuthenticated, patientAuth, async (req, r
       return res.status(404).json({ success: false, message: "Appointment not found or cannot be cancelled" });
     }
 
-    // Restore slot
     const doctor = await Doctor.findById(appointment.doctor);
     if (doctor) {
       const appointmentDate = appointment.date.toISOString().split('T')[0];
@@ -180,17 +171,14 @@ router.put("/cancel/:appointmentId", isAuthenticated, patientAuth, async (req, r
       }
     }
 
-    // Emit real-time update
     emitStatus(req, appointment._id, 'cancelled', { cancelledBy: 'patient' });
 
     res.json({ success: true, message: "Appointment cancelled successfully", data: appointment });
   } catch (error) {
-    console.error("Error cancelling appointment:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// 🔹 Doctor confirms an appointment
 router.patch("/confirm/:appointmentId", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     const doctor = await Doctor.findOne({ user: req.user.id });
@@ -210,7 +198,6 @@ router.patch("/confirm/:appointmentId", isAuthenticated, doctorAuth, async (req,
       return res.status(404).json({ message: "Appointment not found or cannot be confirmed" });
     }
 
-    // Emit real-time update
     emitStatus(req, appointment._id, 'confirmed', {
       doctorName: req.user.name,
       appointmentDate: appointment.date,
@@ -219,12 +206,10 @@ router.patch("/confirm/:appointmentId", isAuthenticated, doctorAuth, async (req,
 
     res.json({ success: true, message: "Appointment confirmed successfully", data: appointment });
   } catch (error) {
-    console.error("Error confirming appointment:", error);
     res.status(500).json({ message: error.message });
   }
 });
 
-// 🔹 Doctor cancels an appointment
 router.put("/doctor-cancel/:appointmentId", isAuthenticated, doctorAuth, async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.appointmentId)) {
@@ -242,7 +227,6 @@ router.put("/doctor-cancel/:appointmentId", isAuthenticated, doctorAuth, async (
 
     if (!appointment) return res.status(404).json({ message: "Appointment not found or cannot be cancelled" });
 
-    // Emit real-time update
     emitStatus(req, appointment._id, 'rejected', { cancelledBy: 'doctor' });
 
     res.json({ success: true, message: "Appointment cancelled successfully", data: appointment });
@@ -251,7 +235,6 @@ router.put("/doctor-cancel/:appointmentId", isAuthenticated, doctorAuth, async (
   }
 });
 
-// 🔹 Book appointment
 router.post("/book", isAuthenticated, patientAuth, async (req, res) => {
   try {
     const { doctorId, date, time } = req.body;
@@ -268,7 +251,6 @@ router.post("/book", isAuthenticated, patientAuth, async (req, res) => {
     const appointmentDate = new Date(date);
     const today = new Date();
     
-    // Compare dates only (ignore time)
     const apptDateOnly = new Date(appointmentDate.getFullYear(), appointmentDate.getMonth(), appointmentDate.getDate());
     const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     
@@ -285,8 +267,6 @@ router.post("/book", isAuthenticated, patientAuth, async (req, res) => {
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) return res.status(404).json({ success: false, message: "Doctor not found" });
 
-    // The provided time could be 24h (e.g. "14:00") or 12h without AM/PM (e.g. "02:00")
-    // We generated both possible 12h/24h strings to check against the doctor's DB
     const time12Hour = convertTo12Hour(time);
     const time24Hour = time;
     let matchedSlotTime = null;
@@ -321,7 +301,6 @@ router.post("/book", isAuthenticated, patientAuth, async (req, res) => {
 
     await appointment.save();
 
-    // Remove booked slot
     doctor.availableSlots = doctor.availableSlots.map((slot) => {
       if (slot.date === date) {
         return { ...slot, slots: slot.slots.filter((t) => t !== matchedSlotTime) };
@@ -334,7 +313,6 @@ router.post("/book", isAuthenticated, patientAuth, async (req, res) => {
       .populate({ path: 'doctor', select: 'name user', populate: { path: 'user', select: 'name email' } })
       .populate({ path: 'patient', select: 'name user', populate: { path: 'user', select: 'name email' } });
 
-    // Emit real-time new appointment to doctor
     const io = req.app.get('io');
     if (io) {
       io.emit('appointment:new', {
@@ -349,12 +327,10 @@ router.post("/book", isAuthenticated, patientAuth, async (req, res) => {
 
     res.status(201).json({ success: true, message: "Appointment booked successfully", data: populatedAppointment });
   } catch (error) {
-    console.error("Error booking appointment:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// 🔹 Doctor uploads prescription after call
 router.post("/:appointmentId/prescription", isAuthenticated, doctorAuth, upload.single('prescription'), async (req, res) => {
   try {
     const { appointmentId } = req.params;
@@ -372,12 +348,10 @@ router.post("/:appointmentId/prescription", isAuthenticated, doctorAuth, upload.
 
     let prescriptionUrl = appointment.prescription;
 
-    // Handle file upload if provided via Multer
     if (req.file) {
       prescriptionUrl = req.file.path;
     }
 
-    // Update appointment
     appointment.status = "completed";
     appointment.notes = notes || appointment.notes;
     appointment.prescription = prescriptionUrl;
@@ -385,7 +359,6 @@ router.post("/:appointmentId/prescription", isAuthenticated, doctorAuth, upload.
     appointment.videoCallStatus = "inactive";
     await appointment.save();
 
-    // Notify patient via socket
     const io = req.app.get('io');
     if (io) {
       io.to(`appointment:${appointmentId}`).emit('appointment:prescriptionUploaded', {
@@ -407,7 +380,6 @@ router.post("/:appointmentId/prescription", isAuthenticated, doctorAuth, upload.
       data: { prescriptionUrl, notes: appointment.notes, status: appointment.status }
     });
   } catch (error) {
-    console.error("Error uploading prescription:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });

@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving it
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
@@ -42,16 +41,17 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Create JWT token
 userSchema.methods.getJWT = async function () {
   const user = this;
-  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || "medi@123", {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("Server misconfigured: JWT_SECRET missing");
+  }
+  const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
   return token;
 };
 
-// Validate password
 userSchema.methods.validatePassword = async function (passwordByUser) {
   const user = this;
   const isMatch = await bcrypt.compare(passwordByUser, user.password);

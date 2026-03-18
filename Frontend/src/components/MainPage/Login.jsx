@@ -110,7 +110,7 @@ export default function Login() {
       >
         <div className="w-full max-w-md">
 
-          
+
           <div
             className="bg-white rounded-2xl overflow-hidden fade-up"
             style={{
@@ -118,10 +118,10 @@ export default function Login() {
               border: "1px solid #dbeafe",
             }}
           >
-            
+
             <div className="h-1" style={{ backgroundColor: BRAND }} />
 
-            
+
             <div className="px-8 pt-7 pb-0">
 
               <h1 className="text-[22px] font-bold text-slate-800 tracking-tight leading-tight">
@@ -132,13 +132,13 @@ export default function Login() {
               </p>
             </div>
 
-            
+
             <div className="mx-8 mt-5 border-t border-slate-100" />
 
-            
+
             <div className="px-8 py-6">
 
-              
+
               {isAdmin ? (
                 <div
                   className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg mb-5 text-sm font-medium"
@@ -179,7 +179,7 @@ export default function Login() {
                 </div>
               )}
 
-              
+
               {error && (
                 <div className="flex items-start gap-2 px-3.5 py-2.5 rounded-lg mb-4 text-sm text-red-600 bg-red-50 border border-red-100">
                   <span className="mt-px">⚠</span>
@@ -230,7 +230,7 @@ export default function Login() {
                   </button>
                 </div>
 
-                
+
                 <p className="mt-6 text-center text-sm text-slate-400">
                   Don't have an account?{" "}
                   <button
@@ -248,7 +248,7 @@ export default function Login() {
             </div>
           </div>
 
-          
+
           <p className="mt-5 text-center text-xs text-slate-400 leading-relaxed">
             By signing in you agree to our{" "}
             <a
