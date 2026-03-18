@@ -10,6 +10,13 @@ const BRAND = "#4a90e2";
 const BRAND_DARK = "#357abd";
 const BRAND_LIGHT = "#eaf2fb";
 
+const PREDEFINED_SLOTS = [
+  "09:00", "09:30", "10:00", "10:30",
+  "11:00", "11:30", "12:00", "12:30",
+  "13:00", "13:30", "14:00", "14:30",
+  "15:00", "15:30", "16:00", "16:30"
+];
+
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return new Date(dateString).toLocaleDateString("en-GB", {
@@ -38,6 +45,7 @@ export default function Availability() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [btnHover, setBtnHover] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [isCustomTime, setIsCustomTime] = useState(false);
 
   useEffect(() => {
     if (!doctorData) {
@@ -145,21 +153,55 @@ export default function Availability() {
                 )}
               </div>
 
-              
-              <div className="space-y-2">
+              {/* Time Selection */}
+              <div className="space-y-4 max-w-md">
                 <label className="text-xs font-bold text-slate-500 uppercase">
-                  Start Time
+                  Select Time
                 </label>
 
-                <div className="flex items-center gap-3 border rounded-xl px-4 bg-slate-50">
-                  <Clock size={18} style={{ color: BRAND }} />
-                  <input
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="flex-1 py-3 bg-transparent outline-none"
-                  />
-                </div>
+                {!isCustomTime ? (
+                  <div className="flex flex-wrap gap-2">
+                    {PREDEFINED_SLOTS.map((slot) => (
+                      <button
+                        key={slot}
+                        onClick={() => setTime(slot)}
+                        className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 border ${
+                          time === slot
+                            ? "border-[#4a90e2] bg-[#4a90e2] text-white shadow-md shadow-[#4a90e2]/30"
+                            : "border-slate-200 bg-white text-slate-600 hover:border-[#4a90e2] hover:text-[#4a90e2]"
+                        }`}
+                      >
+                        {formatTime(slot)}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => { setIsCustomTime(true); setTime(""); }}
+                      className="px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                    >
+                      Other...
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-3 border rounded-xl px-4 bg-slate-50 focus-within:border-[#4a90e2] focus-within:bg-white transition-all">
+                      <Clock size={18} style={{ color: BRAND }} />
+                      <input
+                        type="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                        className="flex-1 py-3 bg-transparent outline-none text-slate-700 font-medium"
+                      />
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => { setIsCustomTime(false); setTime(""); }}
+                        className="text-xs font-semibold text-[#4a90e2] hover:underline"
+                      >
+                        ← Back to predefined slots
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
