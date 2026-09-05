@@ -119,11 +119,22 @@ app.use((err, req, res, next) => {
   });
 });
 
+
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
-  server.listen(PORT, () => {
-  });
-}).catch((err) => {
-  process.exit(1);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 MedConnect API running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
+
